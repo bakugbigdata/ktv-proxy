@@ -1,0 +1,14 @@
+{
+  "name": "archive-google-ai-studio",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.6.1",
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,2397 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<title>열린 아카이브 KTV 나누리</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="title" content="열린 아카이브 KTV 나누리"/>
+		<meta name="description" content="KTV,나누리,나누리포털,열린아카이브,아카이브,아카이브포털,한국정책방송원 아카이브포털">
+		<link rel="shortcut icon" href="/usr/kor/favicon.ico"/>
+		<link rel="apple-touch-icon-precomposed" href="/usr/kor/favicon-152.png"/>
+
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-reset.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-common.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-font.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-layout.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-button.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-table.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-main.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-contents.css?c1027" media="all"/>
+<!-- 		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-search.css?c1027" media="all"/> -->
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-popup.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-popup-intro.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-carousel.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-response.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-response-main.css?c1027" media="all"/>
+<!-- 		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-response-search.css?c1027" media="all"/> -->
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-dist.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-lab.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-xeicon.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/kap-jquery-ui.css?c1027" media="all"/>
+		<link rel="stylesheet" type="text/css" href="/usr/kor/css/ui.totop.css?c1027" media="all"/>
+
+		<!--[if lt IE 9]>
+			<script src="/usr/kor/js/kap-html5.js"></script>
+		<![endif]-->
+
+		<script src="/usr/kor/js/kap-jquery-2.2.4.min.js"></script>
+		<script src="/usr/kor/js/kap-jquery-easing.1.3.js"></script>
+		<script src="/usr/kor/js/kap-jquery-ui.min.js"></script>
+		<script src="/usr/kor/js/kap-jquery-ui-datepicker-ko.js"></script>
+		<script src="/usr/kor/js/kap-iscroll.js"></script>
+		<script src="/usr/kor/js/kap-slick.js"></script>
+		<script src="/usr/kor/js/kap-carousel.js?c1027"></script>
+		<script src="/usr/kor/js/kap-ui.js?c1027"></script>
+		<script src="/usr/kor/js/jquery.ui.totop.min.js"></script>
+		<script src="/js/archive/search/searchedkwd.js?c1027"></script>
+		<script src="/js/archive/search/search_common.js?c1027"></script>
+		<script src="/js/archive/ktv_cmmn.js?c1027"></script>
+
+		<script src="/js/egovframework/com/cmm/jquery.form.min.js"></script>
+		<script src="/js/egovframework/com/cmm/jquery.serialize-object.js"></script>
+
+		
+		<script src="/js/archive/bootstrap-4.3.0.js"></script>
+
+
+		<!-- datepicker -->
+		<script>
+			const CONTEXT_PATH = 'nanuri.ktv.go.kr';
+			$(document).ready(function(){
+				 $("#datepicker1, #datepicker2").datepicker({
+					dateFormat:'yy-mm-dd',
+					changeYear: true,
+					showOn: "both",
+					buttonText: "<span class='blind'>선택</span>",
+					yearRange: 'c-10:c+10'
+				},
+				$.datepicker.regional['ko']
+				);
+
+				$("html, body").on("DOMMouseScroll MouseScrollEvent MozMousePixelScroll wheel scroll", function () {
+				   $("#datepicker1, #datepicker2").datepicker("hide");
+				});
+
+			});
+		</script>
+	</head>
+<body>
+	<div id="skip">
+		<strong class="blind">반복영역 건너뛰기</strong>
+		<a href="#gnb">주메뉴 바로가기</a>
+		<a href="#scontents">본문 바로가기</a>
+	</div>
+	<div id="wrap">
+	    
+
+<script>
+$(document).ready(function(){
+	
+			$("._logout").click(function() {
+				if (confirm("로그아웃하시겠습니까?")) {
+					appCall("logout");
+					location.href= "/member/logout.do";
+				}
+			});
+		
+
+	$(".allsch_close").click(function() {
+		$("#allSearch").val("");
+
+	});
+
+	//즐겨찾기 누르면 이벤트 발생
+	$('#bookMark').click(function () {
+		
+            var menuIdex = 1;
+            var bkmkMenuNm = null;
+
+            //즐겨찾기 메뉴명에 들어가면 현재 위치 탭 정보 저장
+            $('.depth').each(function(){
+                if(menuIdex == 1){
+                    bkmkMenuNm = $(this).text() + ' > ';
+                } else if(menuIdex == 2){
+                    bkmkMenuNm = bkmkMenuNm + $(this).text() + ' > ';
+                } else if(menuIdex == 3){
+                    bkmkMenuNm = bkmkMenuNm + $(this).text().replace('현재 위치','') + ' > ';
+                } else if(menuIdex == 4){
+                    bkmkMenuNm = bkmkMenuNm + $(this).text().replace('현재 위치','') + ' > ';
+                } else {
+                    bkmkMenuNm = bkmkMenuNm + $(this).text().replace('현재 위치','');
+                }
+                menuIdex++;
+
+            })
+
+            // 마지막 ">" 삭제
+            var endStr = bkmkMenuNm.substring(bkmkMenuNm.length, bkmkMenuNm.length-3);
+            if(endStr == ' > '){
+                bkmkMenuNm = bkmkMenuNm.substring(0, bkmkMenuNm.length-3);
+            }
+
+			//url,name,메뉴id	 ajax 처리
+			var cntntsUrl = window.location.pathname;
+			var data = { "bkmkUrl":cntntsUrl, "bkmkMenuNm":bkmkMenuNm , "bkmkMenuId":"204001001"}
+
+			sendAjax("/myPage/selectFavoriteMenuInsertGo.do",   JSON.stringify(data), "post", downReqCallback);
+		
+
+	});
+
+	
+		//activeFavorite();//즐겨찾기 표시 활성화 위한 중복 체크 호출
+	
+});
+
+function fn_moveMenu(url){
+   	location.href=""+url+""
+}
+
+//url,name,메뉴id	 ajax 등록 처리 후 즐겨찾기 버튼 활성화
+function downReqCallback(data){
+ 	alert(data.msg);
+ 	if(data.action == "insert"){
+ 		$('#bookMark').addClass("active");
+ 	}else{
+ 		$('#bookMark').removeClass("active");
+ 	}
+ }
+//즐겨찾기 표시 활성화 위한 중복 체크 -------------------
+function activeFavorite() {
+	var data = {"bkmkMenuId":"204001001"}
+	sendAjax("/myPage/favoriteMenuListCheck.do",   JSON.stringify(data), "post", activeFavoriteCallback);
+}
+
+//링크복사
+ function copy_trackback() {
+	var trb=location.href;
+	 var IE=(document.all)?true:false;
+	 if (IE) {
+	 if(confirm("주소를 클립보드에 복사하시겠습니까?"))
+		 window.clipboardData.setData("Text", trb);
+	 } else {
+		 temp = prompt("Ctrl+C를 눌러 클립보드로 복사하세요", trb);
+	 }
+
+
+ }
+
+function activeFavoriteCallback(data){
+ 	if(data.action == "check"){
+ 		$('#bookMark').addClass("active");
+ 	}else{
+ 		$('#bookMark').removeClass("active");
+ 	}
+ }
+//----------------------------------------------------
+
+function activeFavoriteCallback(data){
+ 	if(data.action == "check"){
+ 		$('#bookMark').addClass("active");
+ 	}else{
+ 		$('#bookMark').removeClass("active");
+ 	}
+ }
+//----------------------------------------------------
+
+//네이버 블로그 공유하기 - 공인ip에서 정상 작동 ,로컬 작동 되지 않음
+var url_default_ks = "https://story.kakao.com/share?url=";
+var url_default_fb = "https://www.facebook.com/sharer/sharer.php?u=";
+var url_default_tw_txt = "https://twitter.com/intent/tweet?text=";
+var url_default_tw_url = "&url=";
+var url_default_band = "http://band.us/plugin/share?body=";
+var url_route_band = "&route=";
+var url_default_naver = "http://share.naver.com/web/shareView.nhn?url=";
+var title_default_naver = "&title=";
+var url_this_page = location.href;
+var title_this_page = document.title;
+var url_combine_ks = url_default_ks + url_this_page;
+var url_combine_fb = url_default_fb + url_this_page;
+var url_combine_tw = url_default_tw_txt + document.title + url_default_tw_url + url_this_page;
+var url_combine_band = url_default_band + encodeURI(url_this_page)+ '%0A' + encodeURI(title_this_page)+'%0A' + '&route=tistory.com';
+var url_combine_naver = url_default_naver + encodeURI(url_this_page) + title_default_naver + encodeURI(title_this_page);
+
+//facebook share
+//sns공유하기는 외부에서 접속이 가능한 포트 사용해야한 공유가 가능합니다!!!
+//네이버 서버에서 접근할 수 있는 아이피(공인아이피)이고 방화벽이 열려있어야 동작합니다!!!!!!
+function open_page(url) {
+    newPage=window.open(url,'_blank');
+}
+
+//naver share
+function naverShare() {
+    var url=encodeURI(encodeURIComponent(location.href));
+    var title =encodeURI(title_this_page);
+    var shareURL = "https://share.naver.com/web/shareView.nhn?url=" + url + "&title=" + title;
+
+    window.open(shareURL, "share_naver", "width=410, height=500, resizable=no");
+    return false;
+}
+</script>
+
+
+<!--페이스북 공유 부분할 때 추가 -->
+<meta property="og:url"         content="url_this_page" />
+<meta property="og:type"        content="website" />
+<meta property="og:title"       content="Your Website Title" />
+<meta property="og:description" content="Your description" />
+<meta property="og:image"       content="https://www.your-domain.com/path/image.jpg" />
+
+<!--페이스북 공유 부분할 때 추가 -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v3.3"></script>
+<div id="fb-root"></div>
+<script>
+    (function(d, s, id) {
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) return;
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+         fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+
+    function btn_print() {
+        window.print();
+    }
+
+</script>
+
+
+<script>
+
+	function fn_detailSearch() {
+		fn_search_detail();
+	}
+
+	function fn_searchKeyword(kwd) {
+		$("input[name='msearch']", "#SearchForm").val(kwd);
+		fn_search_detail();
+	}
+
+</script>
+
+<form id="totalSearchForm" method="post" action="/search/searchResultMain.do">
+
+	<input type="hidden" id="cntntsTy" name="cntntsTy" value="" />
+	<input type="hidden" id="brdcstStleSe" name="brdcstStleSe" value="" />
+	<input type="hidden" id="insttCode" name="insttCode" value="" />
+	<input type="hidden" id="shootingDt" name="shootingDt" value="" />
+	<input type="hidden" id="mediaTy" name="mediaTy" value="" />
+	<input type="hidden" id="ehistoryGb" name="ehistoryGb" value="" />
+	<input type="hidden" id="category" name="category" value="" />
+
+	<input type="hidden" id="mustKeyword" name="mustKeyword" value=""/>
+	<input type="hidden" id="ignoreKeyword" name="ignoreKeyword" value=""/>
+	<input type="hidden" id="prodDeStart" name="prodDeStart" value=""/>
+	<input type="hidden" id="prodDeEnd" name="prodDeEnd" value=""/>
+	<input type="hidden" id="clor" name="clor" value=""/>
+	<input type="hidden" id="clor2" name="clor2" value=""/>
+	<input type="hidden" id="koglTy" name="koglTy" value=""/>
+	<input type="hidden" id="mediaTyFHD" name="mediaTyFHD" value=""/>
+	<input type="hidden" id="mediaTyHD" name="mediaTyHD" value=""/>
+	<input type="hidden" id="mediaTySD" name="mediaTySD" value=""/>
+	<input type="hidden" id="mediaTmStart" name="mediaTmStart" value=""/>
+	<input type="hidden" id="mediaTmEnd" name="mediaTmEnd" value=""/>
+	<input type="hidden" id="dwldPosblAt" name="dwldPosblAt" value=""/>
+
+	<input type="hidden" id="clorYn" name="clorYn" value=""/>
+	<input type="hidden" id="koglTyYn" name="koglTyYn" value=""/>
+	<input type="hidden" id="mediaTyYn" name="mediaTyYn" value=""/>
+	<input type="hidden" id="dwldPosblAtYn" name="dwldPosblAtYn" value=""/>
+
+	<input type="hidden" id="baseKeyword" name="baseKeyword" value="" />
+
+</form>
+			<header id="header">
+				<div class="header_top">
+					<h1 class="logo">
+						<a href="/"><span class="blind">열린 아카이브 KTV 나누리</span></a>
+					</h1>
+
+					<div class="util">
+						<ul class="memb">
+
+									<li><a href="#kap" class="_logout"><span>로그아웃</span></a></li>
+								
+								<li><a href="/member/memberInfoModify.do"><span>회원정보수정</span></a></li>
+							
+							<li><a href="/board/boardList.do?bbsId=BBS00001&obj=7&leftFlag=Y"><span >공지사항</span></a></li>
+							<li><a href="/board/boardList.do?bbsId=BBS00002&obj=8&leftFlag=Y"><span>개선요청</span></a></li>
+							<li><a href="/static/page/staticPage.do?staticPageId=3&obj=1&leftFlag=Y"><span>아카이브소개</span></a></li>
+					   <!-- <li><a href="/archive/MainEngHome.do" class="global" target="_blank" title="새창열림"><span>ENG</span></a></li> -->
+						</ul>
+						<div class="inner_right">
+							<ul class="info">
+								<li><a href="/myPage/playContentList.do?obj=1"><span>마이페이지</span></a></li>
+								
+								<li><a href="/schedule/shotScheduleList.do"><span>취재일정</span></a></li>
+								
+								<li><a href="/archive/live/liveCalendar.do"><img src="/usr/kor/images/main/gnb_onair.png" alt="라이브일정"> <span>라이브일정</span></a></li>
+								<!-- <li><a href="/archive/live/liveManageMonthList.do"><img src="/usr/kor/images/main/gnb_onair.png" alt="라이브일정"> <span>라이브일정(old)</span></a></li> -->
+								<!-- <li><a href="http://www.ktv.go.kr/broadChart/tv" target="_blank" title="새창열림"><span>KTV 방송편성표</span></a></li> -->
+								<!-- <li><a href="http://www.ktv.go.kr/onair/tv?pos=header" target="_blank" title="새창열림"><img src="/usr/kor/images/main/gnb_onair.png"> <span>온에어</span></a></li> -->
+							</ul>
+							<ul class="link">
+								<li><a href="http://www.ktv.go.kr" target="_blank" title="새창열림"><span>KTV 국민방송</span></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="allmenu">
+					<a href="#kap" class="allmenu_toggle">
+						<strong><span class="blind">전체메뉴</span></strong>
+					</a>
+				</div>
+
+				<div id="allmenu_layer">
+					<div class="allmenu_top">
+						<div class="logo">
+							<strong><span class="blind">열린 아카이브 KTV 나누리</span></strong>
+						</div>
+					</div>
+
+		<div class="allmenu_inner">
+			<div class="util">
+				<ul class="memb">
+
+							<li><a href="#kap" class="_logout"><span>로그아웃</span></a></li>
+						
+						<li><a href="/member/memberInfoModify.do"><span>회원정보수정</span></a></li>
+					
+					<li><a href="/myPage/playContentList.do?obj=1"><span>마이페이지</span></a></li>
+					<li><a href="http://www.ktv.go.kr" target="blank" title="새창열림"><span>KTV 국민방송</span></a></li>
+					<!-- <li><a href="/archive/MainEngHome.do" class="global" target="_blank" title="새창열림"><span>ENG</span></a></li> -->
+				</ul>
+			<!--<ul class="link">
+					<li><a href="http://www.ktv.go.kr" target="blank" title="새창열림"><span>KTV 국민방송</span></a></li>
+				</ul> -->
+			</div>
+			<ul class="inner_list">
+				
+					<li><a href="#kap" class="tit">통합검색</a>
+						
+								<div class="depth2">
+									<ul>
+										
+												<li><div class="in_box"><a href="/search/searchResultMain.do"><span>통합검색</span></a>
+													
+
+												</div>
+											</li>
+										
+								</ul>
+							</div>
+						</li>
+					
+					<li><a href="#kap" class="tit">촬영영상</a>
+						
+								<div class="depth2">
+									<ul>
+										
+												<li><div class="in_box"><a href="/shot/selectOrignalShotList.do"><span>클립본(원본)</span></a>
+													
+
+												</div>
+											</li>
+										
+												<li><div class="in_box"><a href="/shot/selectCleanList.do"><span>클린본</span></a>
+													
+
+												</div>
+											</li>
+										
+												<li><div class="in_box"><a href="/shot/selectMasterList.do"><span>마스터본</span></a>
+													
+
+												</div>
+											</li>
+										
+								</ul>
+							</div>
+						</li>
+					
+					<li><a href="#kap" class="tit">방송영상</a>
+						
+								<div class="depth2">
+									<ul>
+										
+												<li><div class="in_box"><a href="/broad/newsVideoList.do"><span>뉴스영상</span></a>
+													
+
+												</div>
+											</li>
+										
+												<li><div class="in_box"><a href="/broad/programVideoList.do"><span>프로그램영상</span></a>
+													
+
+												</div>
+											</li>
+										
+								</ul>
+							</div>
+						</li>
+					
+					<li><a href="#kap" class="tit">미디어영상</a>
+						
+								<div class="depth2">
+									<ul>
+										
+												<li><div class="in_box"><a href="/insttVideo/mediaVideoList.do"><span>미디어영상</span></a>
+													
+
+												</div>
+											</li>
+										
+												<li><div class="in_box"><a href="/board/boardList.do?bbsId=BBS00006"><span>미디어 자료실</span></a>
+													
+
+												</div>
+											</li>
+										
+												<li><div class="in_box"><a href="/board/boardList.do?bbsId=BBS00007"><span>미디어 협업게시판</span></a>
+													
+
+												</div>
+											</li>
+										
+								</ul>
+							</div>
+						</li>
+					
+					<li><a href="#kap" class="tit">기록영상</a>
+						
+								<div class="depth2">
+									<ul>
+										
+												<li><div class="in_box"><a href="/history/historyMain.do"><span>기록영상</span></a>
+													
+																		<ul class="depth3">
+																		
+																	<li><a href="/history/koreaNewsList.do">대한뉴스</a> </li>
+														 	
+																	<li><a href="/history/koreaNewsPreList.do">예비촬영본</a> </li>
+														 	
+																	<li><a href="/history/koreaNewsUnpublishList.do">미공개대한뉴스</a> </li>
+														 	
+																	<li><a href="/history/cultureNewsList.do">문화영화</a> </li>
+														 	
+																	<li><a href="/history/presidentVideoList.do">대통령기록영상</a> </li>
+														 	
+																	<li><a href="/history/koreaModernHistoryList.do">한국의현대사</a> </li>
+														 	
+																	<li><a href="/history/todayEventList.do">오늘의사건</a> </li>
+														 	
+															</ul>
+														
+
+												</div>
+											</li>
+										
+								</ul>
+							</div>
+						</li>
+					
+					<li><a href="#kap" class="tit">주제관</a>
+						
+								<div class="depth2">
+									<ul>
+										
+												<li><div class="in_box"><a href="/collection/contentCollectionList.do"><span>주제관</span></a>
+													
+
+												</div>
+											</li>
+										
+								</ul>
+							</div>
+						</li>
+					
+				</ul>
+
+
+			<a href="#kap" class="allmenu_close"> <strong><span
+					class="blind">닫기</span></strong>
+			</a>
+		</div>
+				</div>
+
+				<div class="allsch">
+					<a href="#kap" class="allsch_toggle">
+						<strong><span class="blind">통합검색</span></strong>
+					</a>
+
+					<div id="allsch_layer">
+						<div class="search">
+							<div class="search_area">
+								<fieldset>
+									<legend>통합검색</legend>
+									<input type="text"  onKeyDown="if (window.event.keyCode == 13) {fn_search_all();}" id="allSearch" name="allsearch" class="search_int" maxlength="20" title="KTV 나누리 통합검색" />
+									<label for="allSearch" class="blind">통합검색</label>
+									<div class="search_btn"><button type="button" name="button"  onclick="fn_search_all();" ><span class="blind">검색</span></button></div>
+									<a class="allsch_close"><strong><span class="blind">닫기</span></strong></a>
+								</fieldset>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<nav id="gnb">
+					<div class="gnb_inner">
+						<ul class="gnb_menu">
+							
+								<li>
+									<a href="#kap"><span>통합검색 </span></a>
+									<ul class="depth2">
+										
+												<li><a href="/search/searchResultMain.do" >통합검색</a>
+													
+
+												</li>
+												
+									</ul>
+								</li>
+							
+								<li>
+									<a href="#kap"><span>촬영영상 </span></a>
+									<ul class="depth2">
+										
+												<li><a href="/shot/selectOrignalShotList.do" >클립본(원본)</a>
+													
+
+												</li>
+												
+												<li><a href="/shot/selectCleanList.do" >클린본</a>
+													
+
+												</li>
+												
+												<li><a href="/shot/selectMasterList.do" >마스터본</a>
+													
+
+												</li>
+												
+									</ul>
+								</li>
+							
+								<li>
+									<a href="#kap"><span>방송영상 </span></a>
+									<ul class="depth2">
+										
+												<li><a href="/broad/newsVideoList.do" >뉴스영상</a>
+													
+
+												</li>
+												
+												<li><a href="/broad/programVideoList.do" >프로그램영상</a>
+													
+
+												</li>
+												
+									</ul>
+								</li>
+							
+								<li>
+									<a href="#kap"><span>미디어영상 </span></a>
+									<ul class="depth2">
+										
+												<li><a href="/insttVideo/mediaVideoList.do" >미디어영상</a>
+													
+
+												</li>
+												
+												<li><a href="/board/boardList.do?bbsId=BBS00006" >미디어 자료실</a>
+													
+
+												</li>
+												
+												<li><a href="/board/boardList.do?bbsId=BBS00007" >미디어 협업게시판</a>
+													
+
+												</li>
+												
+									</ul>
+								</li>
+							
+								<li>
+									<a href="#kap"><span>기록영상 </span></a>
+									<ul class="depth2">
+										
+												<li><a href="/history/historyMain.do" >기록영상</a>
+													
+																<ul class="depth3">
+																
+															<li><a href="/history/koreaNewsList.do">대한뉴스</a> </li>
+														
+															<li><a href="/history/koreaNewsPreList.do">예비촬영본</a> </li>
+														
+															<li><a href="/history/koreaNewsUnpublishList.do">미공개대한뉴스</a> </li>
+														
+															<li><a href="/history/cultureNewsList.do">문화영화</a> </li>
+														
+															<li><a href="/history/presidentVideoList.do">대통령기록영상</a> </li>
+														
+															<li><a href="/history/koreaModernHistoryList.do">한국의현대사</a> </li>
+														
+															<li><a href="/history/todayEventList.do">오늘의사건</a> </li>
+														
+													</ul>
+												
+
+												</li>
+												
+									</ul>
+								</li>
+							
+								<li>
+									<a href="#kap"><span>주제관 </span></a>
+									<ul class="depth2">
+										
+												<li><a href="/collection/contentCollectionList.do" >주제관</a>
+													
+
+												</li>
+												
+									</ul>
+								</li>
+							
+						</ul>
+					</div>
+				</nav>
+			</header>
+			<!-- 현재 위치 안내 : 기록영상 하단 메뉴들에서만 상세페이지는 홈 > 상세로만 보이게하기-->
+				<div class="current_location">
+				<div class="location_inner">
+					<div class="location">
+						<a href="/" class="home"><span class="blind">홈</span></a>
+						<ul>
+							
+									<li><span class="depth">홈</span></li>
+                                    
+									<li><span class="depth">촬영영상</span></li>
+                                    
+									<li><span class="depth">클립본(원본)</span></li>
+                                    
+                                            <li><strong class="depth"><span class="blind">현재 위치</span>상세페이지</strong></li>
+                                        
+						</ul>
+					</div>
+
+					<ul class="control"><!-- 상세페이지에서는 즐겨찾기 버튼 안보이게하기  -->
+						
+							<!-- <li>
+								<button type="button" class="control_book" id="bookMark"><span class="tit">즐겨찾기</span></button>
+							</li> -->
+						
+<!-- SNS 공유하기 -->		  <!-- <li> 상세페이지 중간부분으로 디자인 적용 후 이동 예정  -->
+<!-- 							<div class="control_sns">
+								<button type="button" class="open_sns">
+									<span class="tit">SNS공유</span>
+								</button>
+
+								<div class="share_layer ">
+									<ul class="sns" >
+										<li >
+											<a onclick="open_page(url_combine_fb);"
+											target="_blank" class="t_fb wid30" title="faceBookShare"  >
+												<span class="blind">페이스북</span>
+											</a>
+										</li>
+										<li>
+										  <span>네이버 공유하기
+										    <script type="text/javascript" src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
+									       <script type="text/javascript" >
+									       new ShareNaver.makeButton({"type": "e"});
+									        </script>
+									      </span>
+										</li>
+										<li>링크복사
+										  <span>
+											<a href="" onclick="copy_trackback(this.href); return false;">링크복사</a>
+											 </span>
+										</li>
+									</ul>
+								</div>
+							</div>
+							</li>-->
+
+						<li>
+							<div class="control_zoom">
+								<button type="button" class="zoom_in" onclick="zoomIn();"><span class="blind">확대</span></button>
+								<button type="button" class="zoom_ou" onclick="zoomOut();"><span class="blind">축소</span></button>
+								<button type="button" class="zoom_re" onclick="zoomReset();"><span class="tit">확대축소</span><span class="blind">리셋</span></button>
+							</div>
+						</li>
+						 <!-- <li>
+							<button type="button" class="control_print" onclick="btn_print();">
+								<span class="blind">프린트</span>
+							</button>
+						</li>  -->
+					</ul>
+				</div>
+			</div>
+<form name="selectOne">
+	<input name="vStartP" type="hidden" />
+	<input name="chkURL" type="hidden" />
+	<input name="SmenuNo" id="SmenuNo" type="hidden" value=""/>
+	<input name="SnodeNum" id="SnodeNum" type="hidden" value=""/>
+</form>
+
+
+<script src="/usr/kor/js/gmedia-video-ktv.min.js"></script>
+<link href="/usr/kor/css/gmedia-video-ktv.min.css" rel="stylesheet">
+
+<script src="/usr/kor/js/kap-time.js"></script>
+<link href="/usr/kor/css/kap-time.css" rel="stylesheet">
+
+<script src="/js/archive/member/cookieUtil.js"></script>
+
+
+
+<script>
+
+var ppp;
+var pppEdit;
+var timer;
+
+
+$(document).ready(function () {
+	//콘텐츠 영상
+	ppp = $("#playerBox").gmediaVideoPlugin({
+		autoPlay: false, // 크롬은 정책상 자동재생이 안되게 막아놓은 상태
+		//vodUrl  : encodeURI(""),
+		vodUrl_m: encodeURI("https://play.g.ktv.go.kr:4433/vod-proxy/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy.mp4/playlist.m3u8"),
+		//vodUrl_h: encodeURI("https://play.g.ktv.go.kr:4433/vod-h/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy2m1080.mp4/playlist.m3u8"),
+		vodType: 'application/vnd.apple.mpegurl',   // video/mp4
+		postImageUrl: 'https://nps.ktv.go.kr/data/2025/12/17/1963538/Thumbnail/530.jpg', // 영상의 대표이미지
+		volume: '5',
+		hlsType: true,
+		vttType: false, //vtt 자막파일 있으면 true, 없으면 false
+		//vttUrl: 'http://domain/vod/test.vtt', //자막파일 url
+		//flashUrl: '',
+		flashNotFoundCallback:flashNotFound,
+		flashUrl: '/usr/kor/js/gmedia-video-ktv.swf', // Ie 10에서 flash가 되지않아 수정
+		flashUrl_m: 'rtmp://play.g.ktv.go.kr:1935/vod-proxy/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy.mp4',
+		//flashUrl_h: 'rtmp://play.g.ktv.go.kr:1935/vod-h/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy2m1080.mp4',
+		logoUrl: '/usr/kor/images/common/ktvlogo.png',		// 영상에 로고이미지 추가
+		thumbType: true, //재생 프로그레스바 위에 마우스 올릴 시 이미지 노출되는 기능 사용
+		duration: 300 //영상의 총 플레이 시간을 지정해줘야 영상의 각초마다 이미지 노출 가능,
+		//,snakeImageUrl: 'http://119.204.94.68:8081/images/archive/player/1963538/1963538' // 이미지 경로 http://localhost/vod/assembly/image/MCMSC2676(_1.png를 제외한 파일명)
+	});
+
+	
+	//구간 편집용 영상
+	pppEdit = $("#editPlayerBox").gmediaVideoPlugin({
+		autoPlay: false, // 크롬은 정책상 자동재생이 안되게 막아놓은 상태
+		//vodUrl  : encodeURI(""),
+		vodUrl_m: encodeURI("https://play.g.ktv.go.kr:4433/vod-proxy/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy.mp4/playlist.m3u8"),
+		//vodUrl_h: encodeURI("https://play.g.ktv.go.kr:4433/vod-h/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy2m1080.mp4/playlist.m3u8"),
+		vodType: 'application/vnd.apple.mpegurl',   // video/mp4
+		postImageUrl: 'https://nps.ktv.go.kr/data/2025/12/17/1963538/Thumbnail/530.jpg', // 영상의 대표이미지
+		volume: '5',
+		hlsType: true,
+		vttType: false, //vtt 자막파일 있으면 true, 없으면 false
+		//vttUrl: 'http://domain/vod/test.vtt', //자막파일 url
+		//flashUrl: '',
+		flashNotFoundCallback:flashNotFound,
+		flashUrl: '/usr/kor/js/gmedia-video-ktv.swf', // Ie 10에서 flash가 되지않아 수정
+		flashUrl_m: 'rtmp://play.g.ktv.go.kr:1935/vod-proxy/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy.mp4',
+		//flashUrl_h: 'rtmp://play.g.ktv.go.kr:1935/vod-h/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy2m1080.mp4',
+		logoUrl: '/usr/kor/images/common/ktvlogo.png',		// 영상에 로고이미지 추가
+		thumbType: true, //재생 프로그레스바 위에 마우스 올릴 시 이미지 노출되는 기능 사용
+		duration: 300 //영상의 총 플레이 시간을 지정해줘야 영상의 각초마다 이미지 노출 가능,
+		//,snakeImageUrl: 'http://119.204.94.68:8081/images/archive/player/1963538/1963538' // 이미지 경로 http://localhost/vod/assembly/image/MCMSC2676(_1.png를 제외한 파일명)
+	});
+	
+
+	$(".thumlist_box").on("click", function(){
+		var cntntsId = $(this).attr("data-id");
+		var menuTyCode = $(this).attr("data-menuTyCode");
+		var url = "";
+
+		if(menuTyCode == "original"){
+			url = "/shot/selectOriganlShotDetail.do"+"?cntntsId="+cntntsId;
+		}else if(menuTyCode == "clean"){
+			url = "/shot/selectCleanDetail.do"+"?cntntsId="+cntntsId;
+		}else if(menuTyCode == "master"){
+			url = "/shot/selectMasterDetail.do"+"?cntntsId="+cntntsId;
+		}else if(menuTyCode == "program"){
+			url = "/broad/programVideoDetail.do"+"?cntntsId="+cntntsId;
+		}else if(menuTyCode == "news"){
+			url = "/broad/newsVideoDetail.do"+"?cntntsId="+cntntsId;
+		}
+
+		location.href=url;
+	});
+
+	/* 재생가능여부 미사용
+	$("#playerBox").on("click", function(){
+		var revivPosblAt = "Y";
+		if(revivPosblAt =="N"){
+			ppp.player.pause();
+			alert("재생 불가능합니다. 관리자에게 문의하시기바랍니다. ");
+		}
+	});
+	*/
+
+	//해상도 클릭
+	$(".video_quality ul.body li").click(function(e){
+		if($(this).find("input[name='videoFormat']").is(":disabled")){
+			return;
+		}
+		$(this).find("input[name='videoFormat']").prop("checked",true);
+	});
+
+
+
+	// 다운로드클릭
+	$("#btn_downReq").click(function(e){
+		e.preventDefault();
+		console.log($("input[name='videoFormat']:checked"));
+		var index = $("input[name='videoFormat']:checked").index();
+		if(index<0){
+			alert("다운로드할 영상을 선택해 주십시오.");
+			return;
+		}
+
+		$("#contAgreeLayer").css('display','block');
+	});
+
+	// 콘텐츠이용약관 닫기
+	$("#contAgreeLayer .pop_close").click(function(e){
+		e.preventDefault();
+		$("#contAgreeLayer").css('display','none');
+	});
+
+	// 다운로드요청 버튼 클릭
+	$("#agreeDownloadBtn").on("click", function(){
+		if ($("#contAgreeCheck").prop("checked") == false){
+			alert("다운로드 하시려면 콘텐츠이용약관에 동의하여 주셔야 합니다.");
+			return false;
+		}
+
+		var form = document.searchForm;
+		var cntntsId = form.cntntsId.value;
+		var index = $("input[name='videoFormat']:checked").index();
+		var videoFormat = $("input[name='videoFormat']:checked").val();
+		var userId="bakug7";
+
+		if(userId != "" || userId != null){
+		   if(index<0){
+			   alert("다운로드할 영상을 선택해 주십시오.");
+			   return false;
+		   }
+
+		   var param = { "cntntsId"	: cntntsId
+					   , "videoFormat" : videoFormat };
+
+		   sendAjax("/common/requestDownloadContent.do", JSON.stringify(param), "post", insertRequest);
+
+		}else{
+		   alert("로그인 페이지로 이동합니다.");
+		   location.href="/member/login.do";
+		}
+
+	});
+
+
+ 	// 다운로드 불가
+	$("#btn_downReqNo").on("click", function(){
+		 alert("다운로드 할 수 없는 동영상입니다.");
+	});
+
+	// 관심영상담기 클릭
+	$("#btn_favoriteAdd").on("click", function(){
+		var form = document.detailForm;
+		var cntntsId = form.cntntsId.value;
+		var cntntsTyCode = form.cntntsTyCode.value;
+		var cntntsUrl = window.location.pathname;
+		var userId="bakug7";
+
+		//통계자료 수집
+		var cntntsTyDetail = $("#cntntsTyDetail").val(); //촬영영상(MG0002002) //방송영상(MG0002001) //부처별영상(MG0002004)
+
+		if(userId != ""){
+		   var data = { "cntntsId"	   : cntntsId
+					  , "cntntsTyCode"   : cntntsTyCode
+					  , "cntntsUrl"	  : cntntsUrl
+					  , "cntntsTyDetail" : cntntsTyDetail };
+
+		   sendAjax("/common/favoriteContentApply.do", JSON.stringify(data), "post", callback_favoriteModify);
+		}else{
+		  alert("로그인 페이지로 이동합니다.");
+		  location.href="/member/login.do";
+		}
+	});
+
+	//구간편집 클릭
+	$("#btn_videoEdit").on("click", function(){
+		$("#videoEditLayer").css('display','block');
+		$("#requestForm input[name=cntntsId]").val("1963538"); 	//원본 콘텐츠
+		$("#requestForm #planProgram").val("(구간편집) 20251217 중계_산업통상부 2026년도 정부부처 업무보고 원샷 녹취_김정관 장관_KTV"); //사용프로그램 및 방송일시 \
+		$("#requestForm #title1").val("(구간편집) 20251217 중계_산업통상부 2026년도 정부부처 업무보고 원샷 녹취_김정관 장관_KTV"); 		//제목
+		$("#requestForm #reqType").val("EDIT"); 			//요청타입
+		$("#requestForm #ntcnEmail").val("N"); 				//알림 수신여부 EMAIL
+		$("#requestForm #ntcnSms").val("N"); 				//알림 수신여부 SMS
+		$("#requestForm #memo").val("구간편집요청"); 			//메모
+		$("#requestForm #memoDetail1").val("구간편집요청"); 	//메모상세
+		$("#requestForm #url1").val(window.location.href);	//요청 콘텐츠 페이지 URL
+		$("#requestForm #timeCdBgn").val("00:00:00");		//요청 TC 시작
+		$("#requestForm #timeCdEnd").val(formatHHmmss(ppp.player.duration()));	//요청 TC 종료시간
+
+		setEditSlide();
+	});
+
+	// 미디어 첨부파일 클릭
+	$("#btn_attach").click(function(e){
+		e.preventDefault();
+		$("#attachLayer").css('display','block');
+	});
+
+	// 레이어 팝업 닫기 버튼
+	$("#attachLayer .btn_normal, #attachLayer .pop_close").click(function(e){
+		e.preventDefault();
+		$("#attachLayer").css('display','none');
+	});
+
+	//영상 편집 레이어 팝업 닫기 버튼
+	$("#videoEditLayer .pop_close").click(function(e){
+		e.preventDefault();
+		$("#attachLayer").css('display','none');
+
+		if(timer != null){
+			clearInterval(timer);
+			timer = null;
+		}
+	});
+
+	// 댓글영역 글자수 카운팅
+	$("#comnt").on("input",function (e){
+		e.preventDefault();
+		$("#comCounting").html("<span>"+getCommentTextLength($(this))+"</span>/ 4000");
+	});
+
+	//댓글 영역 클릭 시 placeholder 글씨 지우기
+	$("#comnt").on("click", function(e){
+		e.preventDefault();
+		$('textarea').removeAttr('placeholder');
+	});
+
+	$(".requireMov").click(function(){
+		$("#notiAgreeLayer").css('display','block');
+		$("#requestForm input[name=cntntsId]").val("1963538"); 	//요청 콘텐츠 ID
+		$("#requestForm #planProgram").val("("+$(this).data("fileTyNm")+" 해상도 변환요청) 20251217 중계_산업통상부 2026년도 정부부처 업무보고 원샷 녹취_김정관 장관_KTV"); 	//사용프로그램 및 방송일시
+		$("#requestForm #title1").val("("+$(this).data("fileTyNm")+" 해상도 변환요청) 20251217 중계_산업통상부 2026년도 정부부처 업무보고 원샷 녹취_김정관 장관_KTV"); 		//제목
+		$("#requestForm #reqType").val("RSLN"); 			//요청타입
+		$("#requestForm #ntcnEmail").val("N"); 				//알림 수신여부 EMAIL
+		$("#requestForm #ntcnSms").val("N"); 				//알림 수신여부 SMS
+		$("#requestForm #memo").val("해상도 변환요청"); 		//메모
+		$("#requestForm #memoDetail1").val("해상도 변환요청"); 	//메모상세
+		$("#requestForm #url1").val(window.location.href);	//요청 콘텐츠 페이지 URL
+		$("#requestForm #timeCdBgn").val("00:00:00");		//요청 TC 시작
+		$("#requestForm #timeCdEnd").val(formatHHmmss(ppp.player.duration()));	//TC 종료시간
+	});
+
+	// 알림 수신여부 동의 레이어 팝업 닫기
+	$(".pop_close").click(function(){
+	    $(".layer_wrap").css('display','none');
+	});
+
+	// 팝업보기 클릭
+	$("#btn_popup").on("click", function(e){
+		e.preventDefault();
+
+		if (appCheck && appOS == "android"){
+
+			if (!appVodCheck()) return false;	//영상재생가눙여부
+
+			if (ppp == null) return false;
+			ppp.player.pause();
+
+			$.ajax({
+				url : "/app/pipPlayer",
+				dataType : "json",
+				type : "get",
+				data : {"type" : "vod"
+					, "s" : ppp.player.currentTime()
+					, "stream" : encodeURI("")
+				},
+				success: function(data) {
+					//app pip호출
+					appCall("pipPlayer?uri="+encodeURIComponent(data.uri)+"&start="+data.start+"&end="+data.end+"&retPage="+encodeURIComponent(location.href));
+				},
+				error:function(request,status,error){}
+			});
+			appScreenUnlock();	//App 영상재생Unlock
+
+			return;
+		}
+
+		var option = "width=700, height=392, location=no, scrollbars=no"
+		var url = "/common/popupPlayer.do?cntntsId="+$("#cntntsId").val();
+		window.open(url, "popupPlayer", option);
+	});
+
+	//본문내용 시간클릭
+	$(".detail_tc").click(function (e){
+		e.preventDefault();
+		var sec = $(this).data("sec");
+		playerTimeChange(sec);
+	});
+
+	//App제어
+	if (appCheck){
+		//앱권한받아오기
+		appSetDevStatus();
+	}
+});
+
+function playerTimeChange(sec){
+	ppp.currentTimeChange(sec);
+	$(window).scrollTop($(".view_head").offset().top);
+	ppp.player.play();
+}
+
+
+function getCommentTextLength(el){
+	var codeTotalByte = 0;
+	var codeByte = 0;
+	var textLength = 0;
+
+	for (var idx = 0; idx < el.val().length; idx++) {
+		var oneChar = escape(el.val().charAt(idx));
+		if ( oneChar.length == 1 ) {
+			codeTotalByte++;
+		} else if (oneChar.indexOf("%u") != -1) {
+			codeTotalByte+= 2;
+		} else if (oneChar.indexOf("%") != -1) {
+			codeTotalByte++;
+		}
+
+		if(codeTotalByte <= 4000){
+			codeByte = codeTotalByte;
+			textLength++;
+		}
+	}
+
+	if(codeTotalByte > 4000){
+		el.val(el.val().substring(0, textLength));
+	}
+
+	return codeByte;
+}
+
+
+
+//다운로드 영상 등록
+function insertRequest(result){
+
+	if (result){
+		result = JSON.parse(result);
+		var form = document.searchForm;
+		var videoFormat = $("input[name='videoFormat']:checked").val();
+		var taskId;
+		var fileId;
+		var filePath;
+		var expiredAt;
+
+		//다운로드가 있을 경우
+		if(result.data.task_id){
+			taskId=result.data.task_id;
+			fileId="";
+			filePath = "";
+			expiredAt = "";
+		}else{
+			taskId = "";
+			fileId = result.data.file_id;
+			filePath = result.data.file_path;
+			expiredAt = result.data.expired_at;
+		}
+
+		//다운로드 재생 화질
+		var dwldDtaClCode = videoFormat;
+
+		if(videoFormat == "proxy"){
+			dwldDtaClCode = "SD"
+		} else if(videoFormat == "proxy720"){
+			dwldDtaClCode = "HD";
+		} else if(videoFormat == "proxy2m1080"){
+			dwldDtaClCode = "FHD";
+		} else if(videoFormat == "proxy15m1080"){
+			dwldDtaClCode = "FHD";
+		}
+		var cntntsId = form.cntntsId.value;
+		var cntntsUrl = window.location.pathname ;
+		//var mediaSeqIdVal = $("input[name='mediaSeqIdVal']").val();
+		var mediaSeqIdVal = $("#mediaSeqIdVal_"+videoFormat).val();
+
+		//통계자료 수집
+		var cntntsTyDetail = $("#cntntsTyDetail").val(); //촬영영상(MG0002002) //방송영상(MG0002001)
+
+		var data = {
+					 "cntntsId"	   : cntntsId
+				   , "mediaFileTy"	: videoFormat
+				   , "mediaSeqId"	 : mediaSeqIdVal
+				   , "dwldDtaClCode"  : dwldDtaClCode
+				   , "cntntsUrl"	  : cntntsUrl
+				   , "fileId"		 : fileId
+				   , "dwldUrl"		: filePath
+				   , "expDt"		  : expiredAt
+				   , "taskId"		 : taskId
+				   , "cntntsTyDetail" : cntntsTyDetail
+				   , "title" : "20251217 중계_산업통상부 2026년도 정부부처 업무보고 원샷 녹취_김정관 장관_KTV"
+				   };
+			sendAjax("/common/ajaxRequestDownload.do",   JSON.stringify(data), "post", downReqCallback);
+		} else {
+			alert("다운로드가 불가능합니다. 관리자에게 문의하시기바랍니다.")
+		}
+	}
+
+	//다운로드 요청 Callback
+	function downReqCallback(data){
+		var html = '<strong class="blind">다운로드</strong>' + data.dwldCo;
+		$(".down").html(html);
+		$("input[name='videoFormat']").prop("checked", false);
+
+		var msg = data.msg;
+		if(msg == "요청이 완료되었습니다."){
+			var confirmYn = confirm(data.msg+"\n다운로드 목록화면으로 이동하시겠습니까?");
+			if(confirmYn){
+				location.href="/myPage/contentDownloadList.do";
+			}
+			$("#contAgreeLayer").css('display','none');
+		} else {
+			alert(msg);
+		}
+	}
+
+
+
+
+//관심영상 등록 callback
+function callback_favoriteModify(data){
+	var orignalHtml = $("#favoriteHtml").html();
+	var html = "";
+	if(data.intrst == "0"){
+		html = "관심영상 담기";
+	} else if(data.intrst == "1"){
+		html = "관심영상 빼기";
+	} else {
+		html = orignalHtml;
+	}
+
+	$("#favoriteHtml").html(html);
+	alert(data.msg);
+}
+
+// 미디어 첨부파일 다운로드 클릭
+function fn_mediaAttchFileDown(cntntsId, mediaSeqId){
+	//window.open("/common/mediaAttchFileDown.do" + '?cntntsId=' + cntntsId + "&mediaSeqId=" + mediaSeqId);
+	location.href = "/common/mediaAttchFileDown.do" + '?cntntsId=' + cntntsId + "&mediaSeqId=" + mediaSeqId;
+	return false;
+}
+
+/******************************************************************************
+*										  댓글 CRUD
+********************************************************************************/
+//페이징
+function fn_selectCommentListIndex(pageIndex) {
+	var form=document.getElementById("commentPagingForm");
+	form.pageIndex.value = pageIndex;
+	form.method="post";
+	form.submit();
+}
+
+//댓글 다중라인 처리
+function fn_replaceComment(comnt){
+	comnt = comnt.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+	return comnt;
+}
+
+//댓글 입력창에 Ctrl+V 막기
+function preventKeyCtrlV(){
+	if(event.ctrlKey && event.keyCode == 86 ){
+		event.returnValue=false;
+	}
+}
+
+//댓글 등록
+function fn_comnt(){
+	var form = document.commentForm;
+	var comnt = form.comnt.value;
+	var comntArea = document.getElementById('comnt');
+
+	//댓글 미입력하고 등록 버튼 눌렀을 때
+	if(comnt!=""){
+		var cntntsId = 1963538;
+		var cntntsUrl = window.location.pathname;
+
+		var data = {"comnt" : comnt, "cntntsId" : cntntsId,"cntntsUrl":cntntsUrl};
+
+		sendAjax("/common/comment.do",   JSON.stringify(data), "post", function(data){
+			if (data.result == "S") {
+				location.reload();
+			}else{
+				alert("댓글 등록에 실패하였습니다.");
+			}
+		});
+	}else{
+		alert("댓글 내용을 입력해주세요");
+		comntArea.focus();
+		comntArea.value=comntArea.value;
+	}
+
+}
+
+
+//댓글 수정화면
+function modifyComment(comnt){
+	var commentModifyHtml = "";	//댓글 수정 DOM
+	var comment = $("div .comment_list li[data=" + Number(comnt) + "] p.comment_tit").text();	//댓글내용
+	var commentModify = $("div .comment_list li[data=" + Number(comnt) + "]");	//수정할 댓글 li DOM
+	var commentModifyForm = $("div .comment_list li[data=" + Number(comnt) + "] div.comment_form");//수정할 내용의 FORM
+
+	//댓글 존재 && hide일경우
+	if(commentModifyForm.length>0 && !commentModifyForm.is(':visible')){
+		commentModifyForm.show();
+		return;
+	}
+
+	//댓글 존재 && show일경우
+	if(commentModifyForm.length>0){
+		commentModifyForm.hide();
+		return;
+	}
+
+	commentModifyHtml += "<div class='comment_form'>"
+	commentModifyHtml += "	<label class='blind'>댓글내용입력</label>"
+	commentModifyHtml += "	<textarea id='commentText' name='commentText' oninput='$(\"#recomCounting\").html(\"<span>\"+getCommentTextLength($(this))+\"</span>/ 4000\");' rows='2'>" + comment + "</textarea>"
+	commentModifyHtml += "	<div class='count_area'><p class='counting' id='recomCounting'><span>" + comment.length + "</span>/ 4000</p></div>"
+	commentModifyHtml += "	<div class='confirm_area'>"
+	commentModifyHtml += "		<button type='button' onclick='modifyCommentSave(" + Number(comnt) + ")' class='btn_confirm'><span>수정</span></button>"
+	commentModifyHtml += "	</div>"
+	commentModifyHtml += "</div>";
+
+	commentModify.append(commentModifyHtml);
+}
+
+// 댓글 수정하기
+function modifyCommentSave(comntNo){
+	var cntntsId = $("#cntntsId").val();
+	var commentText = fn_replaceComment($("#commentText").val());
+	var param = { "cmntNo" : comntNo , "cmnt" : commentText, "cntntsId" : cntntsId };
+
+	sendAjax("/common/modifyComn.do",   JSON.stringify(param), "post", function(data){
+		if (data.list  > 0) {
+			alert("수정 완료 되었습니다.");
+			location.reload();
+		}else{
+			alert("수정 실패 하였습니다.");
+		}
+	});
+}
+
+//댓글 삭제
+function delComment(cmntId,cntntsId){
+	var form = document.commentForm;
+	var cmntNo = cmntId;
+	var bbsId = form.bbsId.value;
+	var cntntsId= cntntsId;
+	var param = {"cmntNo" : cmntNo, "bbsId" : bbsId, "cntntsId" : cntntsId };
+
+	if(confirm("해당 데이터를 삭제 하시겠습니까?")){
+		sendAjax("/common/delComn.do",  JSON.stringify(param) , "post",function(data){
+			if(data.list == 1){
+				alert("삭제 완료 되었습니다.");
+				location.reload();
+			}else{
+				alert("삭제 실패 하였습니다.");
+			}
+		});
+	}
+}
+
+function requireRsln(){	//해상도 요청
+	if($("#notiEmail").is(":checked")) $("#ntcnEmail").val("Y");
+	if($("#notiSms").is(":checked")) $("#ntcnSms").val("Y");
+
+	$(".layer_wrap").css('display','none');
+
+	//영상요청 및 알림발송 스케쥴 등록 - (관리자 스케쥴 데몬에서 알림 발송 처리)
+	$("#requestForm").attr("action", "/myPage/videoRequestSave.do");
+	$("#requestForm").submit();
+}
+
+function requireEdit(){	//구간편집 요청
+	if(!fn_editValidate()) {
+		return;
+	}
+
+	if($("#editNotiEmail").is(":checked")) 	$("#ntcnEmail").val("Y");
+	if($("#editNotiSms").is(":checked")) 	$("#ntcnSms").val("Y");
+
+	$("#timeCdBgn").val($("#editTimeCdBgn").val());
+	$("#timeCdEnd").val($("#editTimeCdEnd").val());
+	$("#inFrame").val(Math.round($("#editTimeCdBgn").data("sec") * 29.97));	//NPS 편집요청 시 Frame 단위 요청 (1sec = 1 * 29.97)
+	$("#outFrame").val(Math.round($("#editTimeCdEnd").data("sec") * 29.97));
+
+	$("#memo").val("구간 편집 요청 ( " + $("#editTimeCdBgn").val() + " ~ " + $("#editTimeCdEnd").val()+" )");	//구간편집 요청 내역 저장
+	$("#memoDetail1").val("구간 편집 요청 ( " + $("#editTimeCdBgn").val() + " ~ " + $("#editTimeCdEnd").val()+" )");
+
+	$(".layer_wrap").css('display','none');
+	clearInterval(timer);	//구간편집 영역 내 플레이어 재생 모니터링 중지
+
+	//영상요청 및 알림발송 스케쥴 등록 - (관리자 스케쥴 데몬에서 알림 발송 처리)
+	$("#requestForm").attr("action", "/myPage/videoRequestSave.do");
+
+	$("#requestForm").submit();
+}
+
+function fn_editValidate(){ //구간편집 유효성 검사
+	var timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):(0[1-9]|[0-5][0-9]):(0[1-9]|[0-5][0-9])$/; // hh:mm:ss 형식 검사
+
+	if($("#editTimeCdBgn").val().length == 0 || !timeRegex.test($("#editTimeCdBgn").val())){
+		alert("타임코드 시작시간은 00:00:00 형식으로 입력해 주십시오.");
+		$("#editTimeCdBgn").focus();
+		return false;
+	}
+	if($("#editTimeCdEnd").val().length == 0 || !timeRegex.test($("#editTimeCdEnd").val())){
+		alert("타임코드 종료시간은 00:00:00 형식으로 입력해 주십시오.");
+		$("#editTimeCdEnd").focus();
+		return false;
+	}
+	if(($("#editTimeCdEnd").data("sec") - $("#editTimeCdBgn").data("sec")) < 5 ){
+		alert("편집 구간이 너무 짧습니다. 5초 이상 설정해 주십시오.");
+		$("#editTimeCdEnd").focus();
+		return false;
+	}
+
+	return true;
+}
+
+function setEditSlide(){ //구간 편집 슬라이드 설정
+	if(ppp.player != null && $( "#slider-range" ).slider("instance") == null){
+		 $( "#slider-range" ).slider({
+		      range: true,
+		      min: 0,
+		      max: pppEdit.player.duration(),
+		      values: [ 0, pppEdit.player.duration() ], //슬라이드 생성 시 기본 값 설정
+		      slide: function( event, ui ) { //슬라이드 시 event 발생
+		    	$("#editTimeCdBgn").timeConverter("setSeconds", ui.values[0]);
+		    	$("#editTimeCdEnd").timeConverter("setSeconds", ui.values[1]);
+
+		        pppEdit.currentTimeChange(ui.values[ui.handleIndex ]); //슬라이드 이동 시 플레이어 시간 이동
+		  		pppEdit.player.pause();	//플레이어 재생 중지
+		      }
+	    });
+
+		let _startTime = $( "#slider-range" ).slider( "values", 0 );
+		let _endTime = $( "#slider-range" ).slider( "values", 1 );
+
+		$("#editTimeCdBgn").timeConverter({'seconds': _startTime,'onValueChanged': changedValueListener,'maxSeconds': _endTime });
+		$("#editTimeCdEnd").timeConverter({'seconds': _endTime,'onValueChanged': changedValueListener,'maxSeconds': _endTime });
+		$("#editTimeCdBgn, #editTimeCdEnd").timeConverter('setStyle','margin-right:3px;');
+
+  		pppEdit.player.play();
+  		pppEdit.player.pause();
+	}
+
+	timer = setInterval(() => {	//구간편집 설정에 따라 플레이어 재생 영역 제한
+			if(pppEdit.player.currentTime() > $("#editTimeCdEnd").data("sec")){	//재생 시간값이 구간편집 종료 값보다 클때 구간영역 시작지점으로 이동
+				pppEdit.currentTimeChange($("#editTimeCdBgn").data("sec"));
+		  	}else if(pppEdit.player.currentTime() < $("#editTimeCdBgn").data("sec")){ //재생 시간값이 구간편집 시작 값보다 작을때 구간영역 시작지점으로 이동
+				pppEdit.currentTimeChange($("#editTimeCdBgn").data("sec"));
+			}
+	}, 200);
+}
+
+function changedValueListener(ele){
+	if($("#editTimeCdBgn").timeConverter("getSeconds") > $("#editTimeCdEnd").timeConverter("getSeconds")){
+		alert("편집 시작 시간이 종료 시간보다 큽니다.");
+		$("#editTimeCdBgn").timeConverter("setSeconds", $("#editTimeCdBgn").data("sec"));
+		$("#editTimeCdEnd").timeConverter("setSeconds", $("#editTimeCdEnd").data("sec"));
+		return;
+	}
+	let currtime = ele.timeConverter("getSeconds");
+
+	if(ele.attr('id') == 'editTimeCdBgn' ){
+		$( "#slider-range" ).slider("values", 0, currtime);
+	}else{
+		$( "#slider-range" ).slider("values", 1, currtime);
+	}
+
+    pppEdit.currentTimeChange(currtime); //슬라이드 이동 시 플레이어 시간 이동
+	pppEdit.player.pause();	//플레이어 재생 중지
+}
+
+function addTime(ele, idx){// 시간 +
+	if($(ele).attr("id") == "editTimeCdBgn"){
+		if($("#editTimeCdBgn").timeConverter("getSeconds") + 1 > $("#editTimeCdEnd").timeConverter("getSeconds")){
+			return;
+		}
+	}
+
+	time = ele.timeConverter("getSeconds") + 1;
+
+	if(time > Math.floor(pppEdit.player.duration())) return; //입력된 시간이 영상 최대길이보다 클 경우 return
+
+	pppEdit.player.pause();
+	pppEdit.player.currentTime(time);
+
+	ele.timeConverter("setSeconds", time);
+
+	$( "#slider-range" ).slider("values", idx, time);
+}
+
+function subTime(ele, idx){ //시간 -
+	if($(ele).attr("id") == "editTimeCdEnd"){
+		if($("#editTimeCdEnd").timeConverter("getSeconds") - 1 < $("#editTimeCdBgn").timeConverter("getSeconds")){
+			return;
+		}
+	}
+
+	time = ele.timeConverter("getSeconds") - 1;
+
+	if(time < 0) return;	//입력된 시간이 0보다 작으면 return
+
+	pppEdit.player.pause();
+	pppEdit.player.currentTime(time);
+
+	ele.timeConverter("setSeconds", time);
+	ele.val(formatHHmmss(time));
+
+	$( "#slider-range" ).slider("values", idx, time);
+}
+
+
+
+</script>
+
+
+<form id="detailForm" name="detailForm" action="/shot/selectOriganlShotDetail.do" method="post">
+	<input type="hidden" id="cntntsId"		name="cntntsId"		value="1963538">
+	<input type="hidden" id="cntntsTyCode"	name="cntntsTyCode"	value="original">
+	<input type="hidden" id="goodCo"		name="goodCo"		value="0">
+	<input type="hidden" id="playCo"		name="playCo"		value="8">
+	
+		<input type="hidden" id="cntntsTyDetail" name="cntntsTyDetail" value="MG0002002"/><!-- 통계자료 수집 : 촬영영상 -->
+	
+</form>
+
+<form id="searchForm" name="searchForm" action="/shot/selectOriganlShotDetail.do" method="post">
+	<input type="hidden" name="cntntsId" value="1963538" />
+	<input type="hidden" name="userId"   value="bakug7"/>
+</form>
+
+<!-- 영상요청 폼 (해상도 요청, 구간편집 요청) -->
+<form id="requestForm" name="requestForm" method="post">
+	<input type="hidden" name="cntntsId" value="" />
+	<input type="hidden" name="name" id="name" value="지배경" />
+	<input type="hidden" name="planProgram" id="planProgram" value="" />
+	<input type="hidden" name="title" id="title1" value="" />
+	<!-- vo내 title array 맵핑 시 String에 comma(,)가 포함 될 경우 array로 분리되는 이슈로 빈 title input 추가 -->
+	<input type="hidden" name="title" value="" />
+	<input type="hidden" name="memo" id="memo" value=""/>
+    <input type="hidden" name="memoDetail" id="memoDetail1" value=""/>
+	<input type="hidden" name="url" id="url1" value="" />
+	<input type="hidden" name="ntcnEmail" id="ntcnEmail" value="" />
+	<input type="hidden" name="ntcnSms" id="ntcnSms" value="" />
+	<input type="hidden" name="sttus" id="sttus" value="RCPT"/>
+	<!-- <input type="hidden" name="reqRsoltnYn" id="reqRsoltnYn" value="Y"/> -->
+	<input type="hidden" name="reqType" id="reqType" value="" />
+	<input type="hidden" name="timeCdBgn" id="timeCdBgn" value=""/>
+	<input type="hidden" name="timeCdEnd" id="timeCdEnd" value=""/>
+	<input type="hidden" name="inFrame" id="inFrame" value=""/>
+	<input type="hidden" name="outFrame" id="outFrame" value=""/>
+</form>
+
+<div id="scontainer">
+	<div id="scontents">
+		<div class="scontents_inner">
+			<div class="dev_contents">
+				<div class="page_tit">
+					<h3 class="tit">
+						클립본(원본)
+					</h3>
+				</div>
+				<div class="videoview_ty1">
+					<div class="view_head">
+						<div class="tit_area">
+							<h4 class="tit">20251217 중계_산업통상부 2026년도 정부부처 업무보고 원샷 녹취_김정관 장관_KTV</h4>
+						</div>
+						<div class="meta_area3">
+							<ul>
+								
+									<li>
+										<span>촬영장소</span>
+										<strong>세종특별자치시 정부세종컨벤션센터 국제회의장</strong>
+									</li>
+									<li>
+										<span>촬영일자</span>
+								   		<strong>2025-12-17</strong>
+								   	</li>
+								
+								<li>
+									<span>조회수</span>
+									<strong>27</strong>
+								</li>
+								<li>
+									<span>재생시간</span>
+									<strong>00:11:51</strong>
+								</li>
+							</ul>
+						</div>
+						<!-- <div class="control_sns">
+							<button type="button" class="open_sns">
+							  	<span class="tit">SNS공유</span>
+							</button>
+
+							<div class="share_layer ">
+								 <ul class="sns">
+									 <li class="t_fb" style="cursor:pointer" onclick="open_page(url_combine_fb);" target="_blank">
+									 	<span class="blind"></span>
+									 </li>
+									 <li class="t_nv" style="cursor:pointer" onclick="naverShare();" target="_blank">
+									 	<span class="blind"></span>
+									 </li>
+									 <li class="t_link" style="cursor:pointer" onclick="copy_trackback(); return false;">
+									 	<span class="blind"></span>
+									 </li>
+								 </ul>
+							 </div>
+						 </div> -->
+	   				</div>
+					<div class="view_body">
+						<div class="video_l">
+							<div class="count_area">
+								<ul class="count_list">
+									<li><!-- 좋아요 클릭시 active 클래스 추가 -->
+										<button type="button" class="good" title="좋아요">
+											<strong class="blind">좋아요</strong>0
+										</button>
+									</li>
+									<li><span class="play" title="재생수"><strong class="blind">재생수</strong>8</span></li>
+									<li><span class="down" title="다운로드"><strong class="blind">다운로드</strong>7</span></li>
+									
+									<li>
+									   <button type="button" id="btn_popup" class="popup">
+											<span class="tit">팝업보기</span>
+										</button>
+									</li>
+								</ul>
+							</div>
+
+							<div class="video_area">
+								<div id="playerBox" class="player"></div>
+							</div>
+
+							<div id="video_clip" class="clip_area">
+								
+									<div class="clip_box">
+										<div class="inner" id="time0" onclick="playerTimeChange(0);">
+											<img src="https://nps.ktv.go.kr/data/2025/12/17/1963538/Catalog/1.jpg" class="thum" alt="" />
+											<div class="time">
+												<strong class="tit">0:00</strong>
+											</div>
+										</div>
+									</div>
+								
+									<div class="clip_box">
+										<div class="inner" id="time18" onclick="playerTimeChange(18);">
+											<img src="https://nps.ktv.go.kr/data/2025/12/17/1963538/Thumbnail/530.jpg" class="thum" alt="" />
+											<div class="time">
+												<strong class="tit">0:18</strong>
+											</div>
+										</div>
+									</div>
+								
+							</div>
+
+							<!--<div class="util_area">
+								<ul class="fl">
+									
+										<li style="width:100%"><button class="btn_util ico_l" id="btn_attachNo" disabled="disabled"><span><i class="xi-link"></i>첨부파일</span></button></li>
+									
+								</ul>
+								<ul class="fr mgb10">
+									<li><button class="btn_util" id="btn_popup"><span>팝업보기</span></button></li>
+								</ul>
+							</div> -->
+						</div>
+
+						<div class="video_r">
+							<div class="video_quality">
+								<ul class="head">
+									<li>
+										<div><span class="blind">선택</span></div>
+										<div>화질</div>
+										<div>포맷</div>
+										<div>용량</div>
+									</li>
+								</ul>
+								<ul class="body">
+									
+											<li>
+												<div>
+													<label for="videoFormat0" class="btn_radio">
+														<input type="radio" id="videoFormat0" name="videoFormat" value="" disabled="disabled">
+														<span class="hero" ></span>
+														<strong class="blind">선택</strong>
+													</label>
+												</div>
+												<div>
+												480p</div>
+												<div>MP4</div>
+												<div><button type="button" class="btn_line request requireMov" name="requireMov" data-file-ty-nm="480p"   ><span>영상요청</span></button></div>
+											</li>
+										
+												<li>
+													<div>
+														<label for="videoFormat1" class="btn_radio">
+															<input type="radio" id="videoFormat1" name="videoFormat" value="proxy"  >
+															<span class="hero" ></span>
+															<strong class="blind">선택</strong>
+														</label>
+													</div>
+													<div>
+													720p</div>
+													<div>MP4</div>
+													<div>140.21 MB</div>
+
+													<input type="hidden" name="videoGb"	   id="videoGb_proxy" 		value="" />
+													<input type="hidden" name="strmgUrl"	  id="strmgUrl_proxy" 		value="https://play.g.ktv.go.kr:4433/vod-proxy/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy.mp4/playlist.m3u8"/>
+													<input type="hidden" name="mediaSeqIdVal" id="mediaSeqIdVal_proxy" value="7741839" />
+												</li>
+											
+												<li>
+													<div>
+														<label for="videoFormat2" class="btn_radio">
+															<input type="radio" id="videoFormat2" name="videoFormat" value="proxy2m1080"  >
+															<span class="hero" ></span>
+															<strong class="blind">선택</strong>
+														</label>
+													</div>
+													<div>
+													1080p (2M)</div>
+													<div>MP4</div>
+													<div>183.21 MB</div>
+
+													<input type="hidden" name="videoGb"	   id="videoGb_proxy2m1080" 		value="" />
+													<input type="hidden" name="strmgUrl"	  id="strmgUrl_proxy2m1080" 		value="https://play.g.ktv.go.kr:4433/vod-h/_definst_/mp4:2025/12/17/1963538/Proxy/20251217M69363_proxy2m1080.mp4/playlist.m3u8"/>
+													<input type="hidden" name="mediaSeqIdVal" id="mediaSeqIdVal_proxy2m1080" value="7741854" />
+												</li>
+											
+												<li>
+													<div>
+														<label for="videoFormat3" class="btn_radio">
+															<input type="radio" id="videoFormat3" name="videoFormat" value="proxy15m1080"  >
+															<span class="hero" ></span>
+															<strong class="blind">선택</strong>
+														</label>
+													</div>
+													<div>
+													1080p (15M)</div>
+													<div>MP4</div>
+													<div>1.26 GB</div>
+
+													<input type="hidden" name="videoGb"	   id="videoGb_proxy15m1080" 		value="" />
+													<input type="hidden" name="strmgUrl"	  id="strmgUrl_proxy15m1080" 		value=""/>
+													<input type="hidden" name="mediaSeqIdVal" id="mediaSeqIdVal_proxy15m1080" value="7741853" />
+												</li>
+											
+								</ul>
+							</div>
+
+							<div class="video_conWrap">
+								<div class="video_get">
+									<!-- <div class="get_info">
+										<ul class="info_list01">
+											<li>상업적 및 저작권을 지불하고 사용할 경우 담당자에게 직접 문의 하시기 바랍니다.</li>
+											<li><i class="xi-call"></i>영상자료 이용문의 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;한국정책방송원 방송영상부 영상자료실 : 044-204-8283~5</li>
+										</ul>
+									</div> -->
+									<!-- <div class="get_info">
+										<ul class="info_list01">
+											<li>
+												<label for="contAgreeCheck" class="btn_check">
+													<input type="checkbox" id="contAgreeCheck" name="contAgreeCheck">
+													<span class="hero"></span>
+													<strong>&nbsp; 콘텐츠 이용약관에 동의합니다</strong>
+												</label>
+												<button type="button" id="contAgree" class="btn_line info small ico_l" style="right:0;position: absolute;">
+													<span><i class="xi-plus-square-o"></i>약관보기</span>
+												</button>
+											</li>
+										</ul>
+									</div> -->
+									<ul class="get_btn get_btn2">
+										
+											<li>
+												<div class="inner">
+													
+															<button type="button" id="btn_videoEdit"  class="btn_line info large"><span class="btn_scissors">구간편집</span></button>
+														
+												</div>
+											</li>
+										
+										<li>
+											<div class="inner">
+												<button type="button" id="btn_favoriteAdd"  class="btn_line info large">
+													<span id="favoriteHtml" class="btn_like">
+														
+																관심영상 담기
+														
+													</span>
+												</button>
+											</div>
+										</li>
+										<li>
+											<div class="inner">
+											   
+											   			<button type="button" id="btn_downReq" class="btn_normal info large"><span class="btn_down">다운로드</span></button>
+											   		
+											</div>
+										</li>
+									</ul>
+								</div>
+
+								
+										<!-- 첨부파일이 없을경우 -->
+										<!-- <div class="file_box2">
+											<p class="file_no">첨부파일이 없습니다.</p>
+										</div> -->
+										<!-- 첨부파일이 없을경우 -->
+									
+   							</div>
+						</div>
+					</div>
+
+					<div class="view_detail">
+						<div class="section_l">
+							<div class="stit_area mgb15">
+								<h4 class="stit04">영상설명</h4>
+							</div>
+							<div class="category_depth ">
+								<div class="depth_wrap cont_area mgb40">
+									<p style="white-space:pre-wrap; overflow: hidden"><span>[주제 : 지역에는 성장을, 기업에는 활력을]</span>
+<span></span>
+<span>녹취</span>
+<span><a href='#tc' class='detail_tc' data-sec='0'>00:00:00</a>		-김정관 산업통상부 장관 업무보고</span>
+</p>
+								</div>
+								<button type="button" class="cate_btnMore" onclick="$('.category_depth').removeClass('slide_before');">
+									<span class="more">상세내용 더보기</span>
+								</button>
+							</div>
+							<div class="stit_area mgb15">
+								<h4 class="stit04">기본정보</h4>
+							</div>
+							<div class="viewlist_ty1 mgb40">
+								<ul class="viewlist">
+									<li>
+										<div class="cont_tit">
+											<strong class="tit">방송형태</strong>
+										</div>
+										<div class="cont_area">
+											<div class="cont_txt">뉴스</div>
+										</div>
+									</li>
+									<li>
+										<div class="cont_tit">
+											<strong class="tit">촬영일자</strong>
+										</div>
+										<div class="cont_area">
+											<div class="cont_txt">2025-12-17</div>
+										</div>
+									</li>
+									<li>
+										<div class="cont_tit">
+											<strong class="tit">촬영장소</strong>
+										</div>
+										<div class="cont_area">
+											<div class="cont_txt">세종특별자치시 정부세종컨벤션센터 국제회의장</div>
+										</div>
+									</li>
+									<li>
+										<div class="cont_tit">
+											<strong class="tit">출연자</strong>
+										</div>
+										<div class="cont_area">
+											<div class="cont_txt">김정관 산업통상부 장관</div>
+										</div>
+									</li>
+									<li>
+										<div class="cont_tit">
+											<strong class="tit">관련기관</strong>
+										</div>
+										<div class="cont_area">
+											<div class="cont_txt">산업통상부</div>
+										</div>
+									</li>
+									<li>
+										<div class="cont_tit">
+											<strong class="tit">키워드</strong>
+										</div>
+										<div class="cont_area">
+											<div class="cont_txt">  #산업통상부  #김정관산업통상부장관  #2026년도  #정부부처  #업무보고  #2025년12월  #이재명정부</div>
+										</div>
+									</li>
+									
+										<li>
+											<div class="cont_tit">
+												<strong class="tit">공공누리</strong>
+											</div>
+											<div class="cont_area">
+												 
+														<a href="https://www.kogl.or.kr/info/licenseType1.do" target="_blank" title="새창열림"><img alt="공공누리의 제 1유형" src="/usr/kor/images/contents/img_opentype01.jpg" /></a>
+													
+												<div class="cont_txt">공공누리 1유형(출처표시)</div>
+											</div>
+										</li>
+									
+								</ul>
+							</div>
+
+							
+
+						</div>
+
+						<div class="section_r">
+							
+								<div class="stit_area mgb15">
+									<h4 class="stit04">관련클립영상</h4>
+								</div>
+								<div class="thumlist_ty4">
+									<ul class="thumlist">
+										
+											<li>
+												<a href="#kap" class="thumlist_box" data-id="1963596" data-menuTyCode="original">
+													<div class="thum_area">
+														<img src="https://nps.ktv.go.kr/data/2025/12/17/1963596/Thumbnail/18157.jpg" class="thum" alt="20251217 산업통상부 2026년도 업무부고 사후 브리핑 녹취_김정관 장관_KTV">
+													</div>
+													<div class="tit_area">
+														
+														<span class="ctit">촬영영상 &gt; 클립본<span class="txt_kwrd">#산업통상부</span></span>
+														<strong class="tit">20251217 산업통상부 2026년도 업무부고 사후 브리핑 녹취_김정관 장관_KTV</strong>
+													</div>
+													<ul class="info_area">
+														<li><span class="time"><strong class="blind">재생시간</strong>00:27:34</span></li>
+													</ul>
+												</a>
+											</li>
+										
+											<li>
+												<a href="#kap" class="thumlist_box" data-id="1963533" data-menuTyCode="original">
+													<div class="thum_area">
+														<img src="https://nps.ktv.go.kr/data/2025/12/17/1963533/Thumbnail/16412.jpg" class="thum" alt="20251217 MNG 수신_이재명 대통령 2026년도 정부부처 업무보고_산업통상부, 지식재산처, 중소벤처기업부 스케치_KTV">
+													</div>
+													<div class="tit_area">
+														
+														<span class="ctit">촬영영상 &gt; 클립본<span class="txt_kwrd">#산업통상부</span></span>
+														<strong class="tit">20251217 MNG 수신_이재명 대통령 2026년도 정부부처 업무보고_산업통상부, 지식재산처, 중소벤처기업부 스케치_KTV</strong>
+													</div>
+													<ul class="info_area">
+														<li><span class="time"><strong class="blind">재생시간</strong>00:22:04</span></li>
+													</ul>
+												</a>
+											</li>
+										
+											<li>
+												<a href="#kap" class="thumlist_box" data-id="1963516" data-menuTyCode="original">
+													<div class="thum_area">
+														<img src="https://nps.ktv.go.kr/data/2025/12/17/1963516/Thumbnail/968.jpg" class="thum" alt="20251217 중계_이재명 대통령 2026년도 정부부처 업무보고_산업통상부, 중소벤처기업부, 지식재산처_원샷 녹취_KTV">
+													</div>
+													<div class="tit_area">
+														
+														<span class="ctit">촬영영상 &gt; 클립본<span class="txt_kwrd">#산업통상부</span></span>
+														<strong class="tit">20251217 중계_이재명 대통령 2026년도 정부부처 업무보고_산업통상부, 중소벤처기업부, 지식재산처_원샷 녹취_KTV</strong>
+													</div>
+													<ul class="info_area">
+														<li><span class="time"><strong class="blind">재생시간</strong>00:17:43</span></li>
+													</ul>
+												</a>
+											</li>
+										
+											<li>
+												<a href="#kap" class="thumlist_box" data-id="1963508" data-menuTyCode="original">
+													<div class="thum_area">
+														<img src="https://nps.ktv.go.kr/data/2025/12/17/1963508/Catalog/54.jpg" class="thum" alt="20251217 중계_이재명 대통령 2026년도 정부부처 업무보고_산업통상부, 중소벤처기업부, 지식재산처_KTV">
+													</div>
+													<div class="tit_area">
+														
+														<span class="ctit">촬영영상 &gt; 클립본<span class="txt_kwrd">#산업통상부</span></span>
+														<strong class="tit">20251217 중계_이재명 대통령 2026년도 정부부처 업무보고_산업통상부, 중소벤처기업부, 지식재산처_KTV</strong>
+													</div>
+													<ul class="info_area">
+														<li><span class="time"><strong class="blind">재생시간</strong>02:53:06</span></li>
+													</ul>
+												</a>
+											</li>
+										
+											<li>
+												<a href="#kap" class="thumlist_box" data-id="1959247" data-menuTyCode="original">
+													<div class="thum_area">
+														<img src="https://nps.ktv.go.kr/data/2025/12/05/1959247/Thumbnail/5409.jpg" class="thum" alt="20251205 산업통상부 제1차 자원안보협의회 개최 스케치_녹취_김정관 장관_KTV">
+													</div>
+													<div class="tit_area">
+														
+														<span class="ctit">촬영영상 &gt; 클립본<span class="txt_kwrd">#산업통상부</span></span>
+														<strong class="tit">20251205 산업통상부 제1차 자원안보협의회 개최 스케치_녹취_김정관 장관_KTV</strong>
+													</div>
+													<ul class="info_area">
+														<li><span class="time"><strong class="blind">재생시간</strong>00:05:04</span></li>
+													</ul>
+												</a>
+											</li>
+										
+									</ul>
+								</div>
+							
+								<div class="stit_area mgb15">
+									<h4 class="stit04">키워드</h4>
+								</div>
+								<div class="keyword_area">
+									
+										<label for="check0" class="check_keyword">
+											<input type="checkbox" id="check0" onclick="location.href='/search/searchResultMain.do?baseKeyword=산업통상부';">
+											<strong class="hero"><span>#산업통상부</span></strong>
+										</label>
+									
+										<label for="check1" class="check_keyword">
+											<input type="checkbox" id="check1" onclick="location.href='/search/searchResultMain.do?baseKeyword=김정관산업통상부장관';">
+											<strong class="hero"><span>#김정관산업통상부장관</span></strong>
+										</label>
+									
+										<label for="check2" class="check_keyword">
+											<input type="checkbox" id="check2" onclick="location.href='/search/searchResultMain.do?baseKeyword=2026년도';">
+											<strong class="hero"><span>#2026년도</span></strong>
+										</label>
+									
+										<label for="check3" class="check_keyword">
+											<input type="checkbox" id="check3" onclick="location.href='/search/searchResultMain.do?baseKeyword=정부부처';">
+											<strong class="hero"><span>#정부부처</span></strong>
+										</label>
+									
+										<label for="check4" class="check_keyword">
+											<input type="checkbox" id="check4" onclick="location.href='/search/searchResultMain.do?baseKeyword=업무보고';">
+											<strong class="hero"><span>#업무보고</span></strong>
+										</label>
+									
+										<label for="check5" class="check_keyword">
+											<input type="checkbox" id="check5" onclick="location.href='/search/searchResultMain.do?baseKeyword=2025년12월';">
+											<strong class="hero"><span>#2025년12월</span></strong>
+										</label>
+									
+										<label for="check6" class="check_keyword">
+											<input type="checkbox" id="check6" onclick="location.href='/search/searchResultMain.do?baseKeyword=이재명정부';">
+											<strong class="hero"><span>#이재명정부</span></strong>
+										</label>
+									
+								</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="layer_wrap" id="attachLayer" style="display:none;">
+	<div class="layer_pop wid600">
+		<div class="head">
+			<h1 class="pop_tit">첨부파일 다운로드</h1>
+			<a href="#kap" class="pop_close">
+				<strong><span class="blind">닫기</span></strong>
+			</a>
+		</div>
+
+		<div class="body">
+			<div class="pop_contents tleft">
+				<div class="stit_area mgb05">
+					<h5 class="stit05">첨부파일</h5>
+				</div>
+
+				<div class="list_controll">
+					<div class="list_num">
+						<strong>0</strong> Products Found.
+					</div>
+				</div>
+
+				<div class="list_wrap">
+					<div class="list_inner active">
+						<div class="normalist_ty1">
+							<ul class="normalist">
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="foot">
+			<div class="foot_btn tcenter">
+				<a href="#kap" class="btn_normal info"><span>닫기</span></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="layer_wrap" id="contAgreeLayer" style="display:none;">
+	<div class="layer_pop wid600">
+		<div class="head">
+			<h1 class="pop_tit">나누리 포털 콘텐츠 이용약관</h1>
+			<a href="#kap" class="pop_close">
+				<strong><span class="blind">닫기</span></strong>
+			</a>
+		</div>
+
+		<div class="body">
+			<div class="pop_contents tleft">
+				<div class="stit_area mgb05">
+					<label for="terms" class="blind">콘텐츠이용약관</label>
+					<textarea id="terms" style="width:100%;height:300px" readonly="readonly">
+&lt;나누리 포털 콘텐츠 이용약관&gt;
+
+(목적)
+이 약관은 KTV 및 KTV 나누리포털(이하 ‘나누리포털’)이 제공하는 콘텐츠 파일의 다운로드 서비스를 이용함에 있어 회원과 ‘나누리포털’의 권리 의무 및 관련 절차 등을 규정하는데 그 목적이 있습니다.
+
+(약관의 효력 및 변경)
+이 약관의 내용은 ‘나누리포털’이 제공하는 각 서비스 항목의 상세페이지에 게시하고 다운로드 과정에서 회원이 이를 동의함으로써 효력이 발생합니다. 회원은 ‘나누리포털’이 약관에서 정한 회원의 권리와 의무를 준수하여야 합니다. ‘나누리포털’은 약관의 변경 시 공지사항, 전자메일 등의 수단으로 안내 공시합니다.
+
+(콘텐츠의 정의)
+콘텐츠는 영상파일뿐만 아니라 음성, 사진, 메타데이터 등을 포함합니다. 주요 서비스 대상은 2차 저작물을 만드는 ‘재료콘텐츠’입니다. 완성된 형태의 마스터 파일을 이용하여 방송 ‘편성’을 원할 경우, 회원사는 KTV 기획편성부와 사전에 협의하여야 합니다. ‘나누리포털’ 은 회원의 특성, 콘텐츠의 사전 저작권 확보 유무에 따라 일부 콘텐츠의 이용을 제한할 수 있습니다.
+
+(분쟁발생시 조치)
+‘나누리포털’에 게시되어 있는 콘텐츠 중 저작권 분쟁 소지가 있거나, 소송 등 법적 문제, 방송권 등 제한적 콘텐츠 발견, 제3자의 권리주장이 있을 때에, ‘나누리포털’은 문제의 해결 시까지 콘텐츠의 차단 또는 삭제조치를 할 수 있습니다. 이와 관련한 ‘나누리포털’의 요청 시 회원은 ‘나누리포털’에서 다운받은 콘텐츠 및 다운받은 콘텐츠로 만든 제작물의 사용을 중단하고 노출을 차단하여야 합니다.
+
+(콘텐츠 이용조건)
+‘나누리포털’은 저작권법 제24조의 2(공공저작물의 자유이용)에 근거하여 콘텐츠를 서비스하고 회원은 공공누리 유형의 이용조건의 범위 안에서 사용하여야 합니다.
+또한 회원은 다운로드 된 파일을 콘텐츠 제작 외에 데이터베이스로 만드는 ‘아카이브’ 행위를 하여서는 안 됩니다.
+
+(나누리 포털의 준수 의무)
+‘나누리포털’은 KTV의 업무상 또는 기술상의 장애로 인하여 서비스를 개시하지 못하는 경우, 복구를 위하여 노력하며 포털에 신속하게 공지하거나 회원에게 이를 통지합니다.
+콘텐츠 이용약관에 적시되지 않은 내용은 나누리 포털의 ‘개인정보처리방침’, ‘저작권정책’ 관련 법령 등을 따릅니다.
+
+(유의사항)
+회원은 제3자의 권리(초상권, 저작권, 저작인접권, 특허권, 폰트, 음악저작권 등)가 포함된 영상자료는 회원이 각각의 권리자에게 사전승인을 받아야 하며, 사전승인 없이 이용하여 발생하는 모든 문제는 회원에게 있습니다.
+회원이 제3자에게 지적재산권 침해 등의 손해를 입힌 경우 KTV는 그 법적책임에 대하여 어떠한 책임도 지지 아니합니다.
+</textarea>
+				</div>
+				<div class="result_message_ty1">
+			   		<label for="contAgreeCheck" class="btn_check">
+						<input type="checkbox" id="contAgreeCheck" name="contAgreeCheck">
+						<span class="hero"></span>
+						<strong>&nbsp; 콘텐츠 이용약관에 동의합니다.(필수)</strong>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="foot">
+			<div class="foot_btn tcenter">
+				<a href="#kap" class="btn_normal info" id="agreeDownloadBtn"><span>다운로드</span></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 해상도요청 Layer  -->
+<div class="layer_wrap layer_wrap2" id="notiAgreeLayer" style="display: none;">
+	<!-- layer_pop -->
+	<div class="layer_pop2 wid350">
+		<!-- head -->
+		<div class="head">
+			<h1 class="pop_tit">처리상태 알림 수신여부</h1>
+			<a href="#nk" class="pop_close">
+				<strong><span class="blind">닫기<span></span></span></strong>
+			</a>
+		</div>
+		<!-- //head -->
+
+		<!-- body -->
+		<div class="body">
+			<!-- pop_contents -->
+			<div class="pop_contents">
+				<!-- result_message_ty1 -->
+				<div class="result_message_ty1">
+					<label for="notiEmail" class="btn_check btn_check2 mgr20">
+						<input type="checkbox" id="notiEmail" checked="checked">
+						<span class="hero"></span>
+						<strong>E-MAIL</strong>
+					</label>
+					<label for="notiSms" class="btn_check btn_check2 mgr10">
+						<input type="checkbox" id="notiSms" checked="checked">
+						<span class="hero"></span>
+						<strong>SMS</strong>
+					</label>
+				</div>
+			</div>
+			<!-- //pop_contents -->
+		</div>
+		<!-- //body -->
+
+		<!-- foot -->
+		<div class="foot">
+			<!-- foot_btn -->
+			<div class="foot_btn tcenter">
+				<a href="#nk" class="btn_line info" onclick="javascript:requireRsln();"><span>확인</span></a>
+
+			</div>
+		</div>
+		<!-- //foot -->
+	</div>
+	<!-- //layer_pop -->
+</div>
+
+<!-- 구간편집요청 Layer  -->
+<div class="layer_wrap layer_wrap2" id="videoEditLayer" style="display:none;">
+	<!-- layer_pop -->
+	<div class="layer_pop2 pop3 wid500">
+		<!-- head -->
+		<div class="head">
+			<h1 class="pop_tit">영상구간편집</h1>
+			<a href="#nk" class="pop_close">
+				<strong><span class="blind">닫기<span></span></span></strong>
+			</a>
+		</div>
+		<!-- //head -->
+
+		<!-- body -->
+		<div class="body">
+			<!-- pop_contents -->
+			<div class="pop_contents">
+				<div class="video_area">
+					<div id="editPlayerBox" class="player" style="height:300px; width:500px;"></div>
+				</div>
+				<div>
+					<div id="slider-range" class="slider-rangeBox"></div>
+					<div class="time_area">
+						<div class="time_box">
+							<button onClick="subTime($('#editTimeCdBgn'),0);" class="t_minus"><span class="blind">-</span></button>
+							<label for="editTimeCdBgn">
+								<input type="text" id="editTimeCdBgn" data-sec="0" />
+							</label>
+							<button onClick="addTime($('#editTimeCdBgn'),0);" class="t_plus"><span class="blind">+</span></button>
+						</div>
+						<span class="t_center"> ~ </span>
+						<div class="time_box">
+							<button onClick="subTime($('#editTimeCdEnd'),1);" class="t_minus"><span class="blind">-</span></button>
+							<label for="editTimeCdEnd">
+								<input type="text" id="editTimeCdEnd" data-sec="0" />
+							</label>
+							<button onClick="addTime($('#editTimeCdEnd'),1);" class="t_plus"><span class="blind">+</span></button>
+						</div>
+					</div>
+					<!-- <input type="text" id="editTitle" /> 구간편집 제목 자동 입력 변경 -->
+				</div>
+				<div class="foot_box">
+					<div class="result_message_ty1">
+						<span class="txt">처리완료 알림 수신여부 </span>
+						<label for="editNotiEmail" class="btn_check btn_check2 mgr20">
+							<input type="checkbox" id="editNotiEmail" >
+							<span class="hero"></span>
+							<strong>E-MAIL</strong>
+						</label>
+						<label for="editNotiSms" class="btn_check btn_check2 mgr10">
+							<input type="checkbox" id="editNotiSms" >
+							<span class="hero"></span>
+							<strong>SMS</strong>
+						</label>
+					</div>
+					<div class="foot_btn">
+						<a href="#nk" class="btn_line info" onclick="javascript:requireEdit();"><span class="btn_request">요청하기</span></a>
+					</div>
+				</div>
+			</div>
+			<!-- //pop_contents -->
+		</div>
+		<!-- //body -->
+
+		<!-- foot -->
+<!-- 		<div class="foot">
+			foot_btn
+			<div class="foot_btn tcenter">
+				<a href="#nk" class="btn_line info" onclick="javascript:requireEdit();"><span>확인</span></a>
+			</div>
+		</div> -->
+		<!-- //foot -->
+	</div>
+	<!-- //layer_pop -->
+</div>
+
+<!-- footer -->
+		    <footer id="footer">
+				<!-- footer_link -->
+				<div class="footer_link">
+					<!-- link_inner -->
+					<div class="link_inner">
+						<!-- link_service -->
+						<ul class="link_service">
+							<!-- <li><a href="/static/page/staticPage.do?staticPageId=4">개인정보처리방침</a></li> -->
+							<li><a href="https://www.ktv.go.kr/guide/privacy" target="_blank" title="개인정보처리방침 새창열림">개인정보처리방침</a></li>
+							<li><a href="/static/page/staticPage.do?staticPageId=12&leftFlag=Y">저작권정책</a></li>
+							<li><a href="/static/page/staticPage.do?staticPageId=6">이용약관</a></li>
+							<li><a href="/static/page/staticPage.do?staticPageId=7">이메일무단수집거부</a></li>
+						</ul>
+
+						<!-- site_global -->
+						<!-- <a href="#kap" target="_blank" class="site_global"><span>ENGLISH</span></a> -->
+
+						<!-- link_site -->
+						<!-- <div class="link_site">
+							<div class="site_jump">
+								<a href="#kap" class="jump_toggle"><span class="txt">정부부처 바로가기</span></a>
+								<div class="site_list">
+									<ul>
+										<li><a href="http://www.president.go.kr" target="_blank" title="새창열림">대통령실</a></li>
+										<li><a href="http://www.pmo.go.kr" target="_blank" title="새창열림">국무총리</a></li>
+									</ul>
+									<ul>
+										<li><a href="http://www.bai.go.kr" target="_blank" title="새창열림">감사원</a></li>
+										<li><a href="http://www.nis.go.kr" target="_blank" title="새창열림">국가정보원</a></li>
+									</ul>
+									<ul>
+										<li><a href="http://www.moel.go.kr" target="_blank" title="새창열림">고용노동부</a></li>
+										<li><a href="http://www.msip.go.kr" target="_blank" title="새창열림">과학기술정보통신부</a></li>
+										<li><a href="http://www.moe.go.kr" target="_blank" title="새창열림">교육부</a></li>
+										<li><a href="http://www.mnd.go.kr" target="_blank" title="새창열림">국방부</a></li>
+										<li><a href="http://www.mpva.go.kr" target="_blank" title="새창열림">국가보훈부</a></li>
+										<li><a href="http://www.molit.go.kr" target="_blank" title="새창열림">국토교통부</a></li>
+										<li><a href="http://www.moef.go.kr" target="_blank" title="새창열림">기획재정부</a></li>
+										<li><a href="http://www.mafra.go.kr" target="_blank" title="새창열림">농림축산식품부</a></li>
+										<li><a href="http://www.mcst.go.kr" target="_blank" title="새창열림">문화체육관광부</a></li>
+										<li><a href="http://www.moj.go.kr" target="_blank" title="새창열림">법무부</a></li>
+										<li><a href="http://www.mohw.go.kr" target="_blank" title="새창열림">보건복지부</a></li>
+										<li><a href="http://www.motie.go.kr" target="_blank" title="새창열림">산업통상자원부</a></li>
+										<li><a href="http://www.mogef.go.kr" target="_blank" title="새창열림">여성가족부</a></li>
+										<li><a href="http://www.mofa.go.kr" target="_blank" title="새창열림">외교부</a></li>
+										<li><a href="http://www.mss.go.kr" target="_blank" title="새창열림">중소벤처기업부</a></li>
+										<li><a href="http://www.unikorea.go.kr" target="_blank" title="새창열림">통일부</a></li>
+										<li><a href="http://www.mof.go.kr" target="_blank" title="새창열림">해양수산부</a></li>
+										<li><a href="http://www.mois.go.kr" target="_blank" title="새창열림">행정안전부</a></li>
+										<li><a href="http://www.me.go.kr" target="_blank" title="새창열림">환경부</a></li>
+									</ul>
+									<ul>
+										<li><a href="http://www.pss.go.kr" target="_blank" title="새창열림">대통령경호처</a></li>
+										<li><a href="http://www.moleg.go.kr" target="_blank" title="새창열림">법제처</a></li>
+										<li><a href="http://www.mfds.go.kr" target="_blank" title="새창열림">식품의약품안전처</a></li>
+										<li><a href="http://www.mpm.go.kr" target="_blank" title="새창열림">인사혁신처</a></li>
+									</ul>
+									<ul>
+										<li><a href="http://www.police.go.kr" target="_blank" title="새창열림">경찰청</a></li>
+										<li><a href="http://www.customs.go.kr" target="_blank" title="새창열림">관세청</a></li>
+										<li><a href="http://www.nts.go.kr" target="_blank" title="새창열림">국세청</a></li>
+										<li><a href="http://www.kma.go.kr" target="_blank" title="새창열림">기상청</a></li>
+										<li><a href="http://www.rda.go.kr" target="_blank" title="새창열림">농촌진흥청</a></li>
+										<li><a href="http://www.spo.go.kr" target="_blank" title="새창열림">대검찰청</a></li>
+										<li><a href="http://www.cha.go.kr" target="_blank" title="새창열림">국가유산청</a></li>
+										<li><a href="http://www.dapa.go.kr" target="_blank" title="새창열림">방위사업청</a></li>
+										<li><a href="http://www.mma.go.kr" target="_blank" title="새창열림">병무청</a></li>
+										<li><a href="http://www.forest.go.kr" target="_blank" title="새창열림">산림청</a></li>
+										<li><a href="http://www.oka.go.kr/" target="_blank" title="새창열림">재외동포청</a></li>
+										<li><a href="http://www.pps.go.kr" target="_blank" title="새창열림">조달청</a></li>
+										<li><a href="http://www.cdc.go.kr/" target="_blank" title="새창열림">질병관리청</a></li>
+										<li><a href="http://kostat.go.kr" target="_blank" title="새창열림">통계청</a></li>
+										<li><a href="http://www.kipo.go.kr" target="_blank" title="새창열림">특허청</a></li>
+										<li><a href="http://www.kcg.go.kr" target="_blank" title="새창열림">해양경찰청</a></li>
+										<li><a href="http://www.naacc.go.kr" target="_blank" title="새창열림">행정중심복합도시건설청</a></li>
+									</ul>
+									<ul class="blind">
+										<li><a href="http://www.pipc.go.kr/" target="_blank" title="새창열림">개인정보보호위원회</a></li>
+										<li><a href="http://www.ftc.go.kr" target="_blank" title="새창열림">공정거래위원회</a></li>
+										<li><a href="http://www.humanrights.go.kr" target="_blank" title="새창열림">국가인권위원회</a></li>
+										<li><a href="http://www.acrc.go.kr" target="_blank" title="새창열림">국민권익위원회</a></li>
+										<li><a href="http://www.fsc.go.kr" target="_blank" title="새창열림">금융위원회</a></li>
+										<li><a href="http://www.nuac.go.kr" target="_blank" title="새창열림">민주평화통일자문회의</a></li>
+										<li><a href="http://www.kcc.go.kr" target="_blank" title="새창열림">방송통신위원회</a></li>
+										<li><a href="http://www.nssc.go.kr" target="_blank" title="새창열림">원자력안전위원회</a></li>
+										<li><a href="http://www.jobs.go.kr/" target="_blank" title="새창열림">일자리위원회</a></li>
+										<li><a href="http://www.nec.go.kr/" target="_blank" title="새창열림">중앙선거관리위원회</a></li>
+										<li><a href="http://www.clad.go.kr/" target="_blank" title="새창열림">지방자치발전위원회</a></li>
+									</ul>
+								</div>
+							</div>
+						</div> -->
+						<!-- //link_site -->
+					</div>
+					<!-- //link_inner -->
+				</div>
+				<!-- //footer_link -->
+
+				<!-- footer_inner -->
+				<div class="footer_inner">
+					<!-- flogo -->
+					<strong class="flogo">
+						<span class="blind">열린 아카이브 KTV 나누리</span>
+					</strong>
+
+					<!-- addr_info -->
+					<ul class="addr_info">
+						<li><span class="m_blind">주소 :</span> <span class="m_blind">우) 30128</span> 세종특별자치시 정부2청사로 13 한국정책방송원 KTV</li>
+						<li>
+							문의처 <span class="tel_num">044-204-8468, 8270, 8285</span>
+							<span class="m_blind">&#40;월~금 09:00~18:00, 공휴일 제외&#41;</span>
+							<!-- 팩스 <span class="tel_num">044.204.8473</span> -->
+						</li>
+					</ul>
+
+					<!-- cs_info -->
+					<div class="cs_info">
+						<dl>
+							<dt>나누리 이용문의   : </dt>
+							<!-- <dd class="tel">&nbsp;전화 <span>044.204.8283-5</span></dd> -->
+							<dd class="eml">&nbsp;이메일 <span>nanuri@ktv.go.kr</span></dd>
+						</dl>
+					</div>
+
+					<!-- <ul class="fsns"> -->
+						<!-- <li><a href="https://www.facebook.com/KTV.kr" target="_blank" class="f_fb" title="새창열림"><span class="blind">페이스북</span></a></li>
+						<li><a href="https://twitter.com/Mylife_KTV" target="_blank" class="f_tt" title="새창열림"><span class="blind">트위터</span></a></li>
+						<li><a href="https://www.youtube.com/user/chKTV520" target="_blank" class="f_yt" title="새창열림"><span class="blind">유튜브</span></a></li> -->
+						<!--<li><a href="https://post.naver.com/ktv520" target="_blank" class="f_np"><span class="blind">네이버포스트</span></a></li>-->
+						<!--<li><a href="https://tv.naver.com/ktv" target="_blank" class="f_nt"><span class="blind">네이버TV</span></a></li>-->
+						<!--<li><a href="https://www.instagram.com/ktvsns" target="_blank" class="f_ig"><span class="blind">인스타그램</span></a></li>-->
+					<!-- </ul> -->
+
+					<!-- copyright -->
+					<p class="copyright">© 열린 아카이브 KTV 나누리. All Rights Reserved.</p>
+				</div>
+				<!-- //footer_inner -->
+			</footer>
+		    <!-- //footer -->
+
+<form id="downForm" name="downForm" method="get">
+	<input type="hidden" name="fileId" id="fileId" />
+	<input type="hidden" name="uploadTy" id="uploadTy" />
+</form>
+
+<iframe id="fileIframe" name="fileIframe" style="display:none;"></iframe>
+
+<script>
+/* 2023고도화 채널톡 미사용
+  (function(){const w=window;if(w.ChannelIO){return w.console.error("ChannelIO script included twice.")}const ch=function(...args){ch.c(args)};ch.q=[];ch.c=function(args){ch.q.push(args)};w.ChannelIO=ch;function l(){if(w.ChannelIOInitialized){return}w.ChannelIOInitialized=true;const s=document.createElement("script");s.type="text/javascript";s.async=true;s.src='https://cdn.channel.io/plugin/ch-plugin-web.js';const x=document.getElementsByTagName("script")[0];if(x.parentNode){x.parentNode.insertBefore(s,x)}}if(document.readyState==="complete"){l()}else{w.addEventListener("DOMContentLoaded",l);w.addEventListener("load",l)}})();
+
+  ChannelIO('boot', {
+    "pluginKey": "a92cbc56-867b-4986-a0c1-e2e9412710fe" ,
+    "memberId": "bakug7",
+    "memberHash" : "2e9de18fc4897398c264aced8bb46d56734b3fd088866f3d67d10bf9b63e0fb2",
+    "profile": {
+        "name": "지배경(연합인포맥스)"
+    }
+  });
+
+*/
+
+</script>
+		<button class="top_btn" title="상단 버튼">Top</button>
+    </div>
+<!-- <script type="text/javascript" src="/js/archive/1260_Insight_WebAnalytics.js"></script> -->
+</body>
+</html>

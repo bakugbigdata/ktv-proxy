@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>archive</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    body { margin:0; font-family: Arial, sans-serif; background:#0f1115; color:#eaeaea; }
+    header { padding:12px 16px; background:#151820; display:flex; gap:12px; align-items:center; }
+    header h1 { font-size:18px; margin:0; }
+    header input { flex:1; padding:8px; }
+    header button { padding:8px 12px; }
+    header .status { font-size:12px; color:#9aa4b2; min-width:120px; text-align:right; }
+
+    main { display:flex; height:calc(100vh - 56px); }
+    #list { width:35%; border-right:1px solid #222; overflow:auto; }
+    #list .item { padding:12px; border-bottom:1px solid #222; cursor:pointer; }
+    #list .item:hover { background:#1b1f2a; }
+
+    #player { flex:1; display:flex; flex-direction:column; }
+    #video { width:100%; max-height:60vh; background:black; }
+    #meta { padding:12px; font-size:13px; white-space:pre-wrap; }
+    #selectBtn { margin:12px; padding:10px; background:#3b82f6; border:none; color:white; cursor:pointer; }
+    #selectBtn:disabled, #searchBtn:disabled { opacity:.6; cursor:not-allowed; }
+
+    .row { display:flex; gap:10px; align-items:center; }
+    .t { font-size:14px; line-height:1.4; }
+
+    .thumb-wrap {
+      position: relative;
+      width: 120px;
+      height: 68px;
+      flex: 0 0 auto;
+    }
+    .thumb {
+      width: 120px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: 4px;
+      background:#111;
+      display:block;
+    }
+    .thumb-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      background: black;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>archive</h1>
+  <input id="q"
+         type="text"
+         placeholder="KTV 나누리 원본 검색"
+         autocomplete="off"
+         autocapitalize="off"
+         spellcheck="false"
+  />
+  <button id="searchBtn">검색</button>
+  <div id="status" class="status"></div>
+</header>
+
+<main>
+  <div id="list"></div>
+
+  <div id="player">
+    <video id="video" controls playsinline></video>
+    <button id="selectBtn">이 영상으로 작업하기</button>
+    <div id="meta">검색 후 결과를 클릭하면 여기서 미리보기/메타가 표시됩니다.</div>
+  </div>
+</main>
+
+<script>
+/* =========================================================
+   DOM refs (안정화: 전역 변수 의존 제거)
+   ========================================================= */
+const qEl = document.getElementById('q');
+const searchBtnEl = document.getElementById('searchBtn');
+const statusEl = document.getElementById('status');
+const listEl = document.getElementById('list');
+const videoEl = document.getElementById('video');
+const metaEl = document.getElementById('meta');
+const selectBtnEl = document.getElementById('selectBtn');
+
+let currentItem = null;
+let mainHls = null;
+
+/* =========================================================
+   공용: 상태 표시 / 버튼 잠금
+   ========================================================= */
+function setStatus(msg) {
+  statusEl.textContent = msg || '';
+}
+function setSearching(isSearching) {
+  searchBtnEl.disabled = isSearching;
+  qEl.disabled = isSearching;
+  setStatus(isSearching ? '검색중…' : '');
+}
+
+/* =========================================================
+   /api/play-url 결과 캐시 (썸네일/프리뷰/재생 공용)
+   ========================================================= */
+const playUrlCache = new Map(); // detailUrl -> { m3u8, meta }
+
+async function getPlayUrl(detailUrl, signal) {
+  if (!detailUrl) return null;
+  if (playUrlCache.has(detailUrl)) return playUrlCache.get(detailUrl);
+
+  const res = await fetch('/api/play-url', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ detailUrl }),
+    signal
+  });
+  const data = await res.json();
+  if (!data || !data.m3u8) return null;
+
+  const out = { m3u8: data.m3u8, meta: data.meta || {} };
+  playUrlCache.set(detailUrl, out);
+  return out;
+}
+
+/* =========================================================
+   썸네일: 큐(동시2) + IntersectionObserver + localStorage
+   ========================================================= */
+const thumbCache = new Map(); // detailUrl -> dataURL
+const THUMB_CONCURRENCY = 2;
+let thumbInFlight = 0;
+const thumbQueue = [];
+
+function enqueueThumb(job) {
+  thumbQueue.push(job);
+  pumpThumbQueue();
+}
+function pumpThumbQueue() {
+  while (thumbInFlight < THUMB_CONCURRENCY && thumbQueue.length) {
+    const job = thumbQueue.shift();
+    thumbInFlight++;
+    Promise.resolve()
+      .then(job)
+      .catch(()=>{})
+      .finally(() => {
+        thumbInFlight--;
+        pumpThumbQueue();
+      });
+  }
+}
+
+const thumbObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      thumbObserver.unobserve(entry.target);
+      enqueueThumb(() => makeThumbForItem(entry.target));
+    }
+  });
+}, { rootMargin: "300px", threshold: 0.01 });
+
+async function makeThumbForItem(imgEl) {
+  const detailUrl = imgEl.dataset.detail;
+  if (!detailUrl) return;
+
+  const cacheKey = "thumb:" + detailUrl;
+
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    imgEl.src = cached;
+    return;
+  }
+  if (thumbCache.has(detailUrl)) {
+    imgEl.src = thumbCache.get(detailUrl);
+    return;
+  }
+
+  const play = await getPlayUrl(detailUrl);
+  if (!play || !play.m3u8) return;
+
+  const dataUrl = await captureVideoFrame(play.m3u8);
+  if (!dataUrl) return;
+
+  thumbCache.set(detailUrl, dataUrl);
+  try { localStorage.setItem(cacheKey, dataUrl); } catch {}
+  imgEl.src = dataUrl;
+}
+
+async function captureVideoFrame(url) {
+  const v = document.createElement('video');
+  v.muted = true;
+  v.playsInline = true;
+  v.crossOrigin = 'anonymous';
+  let localHls = null;
+
+  try {
+    if (url.includes('.m3u8') && window.Hls && Hls.isSupported()) {
+      localHls = new Hls({ enableWorker: true });
+      localHls.loadSource(url);
+      localHls.attachMedia(v);
+      await waitEvent(v, 'loadedmetadata', 10000);
+    } else {
+      v.src = url;
+      await waitEvent(v, 'loadedmetadata', 10000);
+    }
+
+    v.currentTime = Math.min(0.5, v.duration || 0.5);
+    await waitEvent(v, 'seeked', 10000);
+
+    const c = document.createElement('canvas');
+    c.width = v.videoWidth || 320;
+    c.height = v.videoHeight || 180;
+    c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.75);
+  } catch {
+    return null;
+  } finally {
+    try { if (localHls) localHls.destroy(); } catch {}
+    v.src = '';
+  }
+}
+
+function waitEvent(el, name, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(name + ' timeout')), timeoutMs);
+    const on = () => { clearTimeout(t); resolve(); };
+    el.addEventListener(name, on, { once:true });
+  });
+}
+
+/* =========================================================
+   Hover Preview (검정 재발 방지 + idle 후 메모리 해제)
+   - destroy 했으면 loaded=false로 되돌려서 다음 hover 때 재-attach
+   ========================================================= */
+const PREVIEW_IDLE_MS = 4000;
+let activePreview = null; // { wrap, video, hls, idleTimer, loadedRef }
+
+function stopActivePreview(forceDestroy = false) {
+  if (!activePreview) return;
+
+  const { video, hls, idleTimer, loadedRef } = activePreview;
+
+  if (idleTimer) clearTimeout(idleTimer);
+
+  try { video.pause(); } catch {}
+  video.style.display = 'none';
+
+  if (forceDestroy) {
+    try { if (hls) hls.destroy(); } catch {}
+    if (loadedRef) loadedRef.value = false;
+    try { video.removeAttribute('src'); video.load(); } catch {}
+  }
+
+  activePreview = null;
+}
+
+function attachHoverPreview(wrapEl, detailUrl) {
+  const video = wrapEl.querySelector('video');
+  if (!video) return;
+
+  const loadedRef = { value: false };
+  let hlsLocal = null;
+  let m3u8 = null;
+  let idleTimer = null;
+
+  async function ensureLoaded() {
+    if (loadedRef.value && m3u8) return true;
+
+    const play = await getPlayUrl(detailUrl);
+    if (!play || !play.m3u8) return false;
+
+    m3u8 = play.m3u8;
+
+    try { if (hlsLocal) hlsLocal.destroy(); } catch {}
+    hlsLocal = null;
+
+    if (window.Hls && Hls.isSupported()) {
+      hlsLocal = new Hls({ enableWorker: true });
+      hlsLocal.loadSource(m3u8);
+      hlsLocal.attachMedia(video);
+    } else {
+      video.src = m3u8;
+    }
+
+    await waitEvent(video, 'loadedmetadata', 10000);
+    loadedRef.value = true;
+    return true;
+  }
+
+  wrapEl.addEventListener('mouseenter', async () => {
+    if (activePreview && activePreview.wrap !== wrapEl) {
+      stopActivePreview(false); // pause+hide만 (destroy 금지)
+    }
+
+    if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+
+    try {
+      const ok = await ensureLoaded();
+      if (!ok) return;
+
+      activePreview = { wrap: wrapEl, video, hls: hlsLocal, idleTimer: null, loadedRef };
+
+      video.style.display = 'block';
+      try { video.currentTime = 1; } catch {}
+      video.play().catch(()=>{});
+    } catch (e) {
+      console.warn('hover preview failed', e);
+    }
+  });
+
+  wrapEl.addEventListener('mouseleave', () => {
+    try { video.pause(); } catch {}
+    video.style.display = 'none';
+
+    idleTimer = setTimeout(() => {
+      if (activePreview && activePreview.wrap === wrapEl) {
+        stopActivePreview(true);
+      } else {
+        try { if (hlsLocal) hlsLocal.destroy(); } catch {}
+        loadedRef.value = false;
+        try { video.removeAttribute('src'); video.load(); } catch {}
+      }
+    }, PREVIEW_IDLE_MS);
+
+    if (activePreview && activePreview.wrap === wrapEl) {
+      activePreview.idleTimer = idleTimer;
+    }
+  });
+}
+
+/* =========================================================
+   검색 / 재생 (요청 취소 + UI 안정화)
+   ========================================================= */
+let searchController = null;
+
+searchBtnEl.addEventListener('click', () => search());
+qEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') search();
+});
+
+async function search() {
+  const keyword = qEl.value.trim();
+  if (!keyword) return;
+
+  if (searchController) searchController.abort();
+  searchController = new AbortController();
+
+  setSearching(true);
+  setStatus('검색중…');
+
+  try {
+    const res = await fetch('/api/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keyword }),
+      signal: searchController.signal
+    });
+
+    const items = await res.json();
+    listEl.innerHTML = '';
+
+    if (!Array.isArray(items) || items.length === 0) {
+      listEl.innerHTML = '<div class="item">검색 결과가 없습니다.</div>';
+      setStatus('0건');
+      return;
+    }
+
+    setStatus(items.length + '건');
+
+    for (const item of items) {
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `
+        <div class="row">
+          <div class="thumb-wrap">
+            <img class="thumb" alt="">
+            <video muted playsinline></video>
+          </div>
+          <div class="t"></div>
+        </div>
+      `;
+
+      div.querySelector('.t').textContent = item.title || '(제목 없음)';
+
+      const wrap = div.querySelector('.thumb-wrap');
+      const img = wrap.querySelector('.thumb');
+
+      img.dataset.detail = item.detailUrl || '';
+      if (img.dataset.detail) thumbObserver.observe(img);
+
+      if (item.detailUrl) attachHoverPreview(wrap, item.detailUrl);
+
+      div.addEventListener('click', () => loadItem(item));
+      listEl.appendChild(div);
+    }
+  } catch (e) {
+    if (e.name === 'AbortError') return;
+    console.warn(e);
+    setStatus('검색 실패');
+    listEl.innerHTML = '<div class="item">검색 중 오류가 발생했습니다.</div>';
+  } finally {
+    setSearching(false);
+  }
+}
+
+async function loadItem(item) {
+  stopActivePreview(false);
+
+  currentItem = item;
+  setStatus('불러오는중…');
+
+  const play = await getPlayUrl(item.detailUrl);
+  if (!play || !play.m3u8) {
+    metaEl.textContent = '재생 URL(m3u8)을 찾지 못했습니다.';
+    setStatus('재생URL 없음');
+    return;
+  }
+
+  currentItem.m3u8 = play.m3u8;
+  currentItem.meta = play.meta || {};
+
+  playMain(play.m3u8);
+
+  metaEl.textContent = JSON.stringify({
+    title: currentItem.title,
+    detailUrl: currentItem.detailUrl,
+    m3u8: currentItem.m3u8,
+    meta: currentItem.meta
+  }, null, 2);
+
+  setStatus('재생 준비됨');
+}
+
+function playMain(url) {
+  if (mainHls) { try { mainHls.destroy(); } catch {} mainHls = null; }
+
+  if (window.Hls && Hls.isSupported()) {
+    mainHls = new Hls({ enableWorker: true });
+    mainHls.loadSource(url);
+    mainHls.attachMedia(videoEl);
+  } else {
+    videoEl.src = url;
+  }
+}
+
+/* =========================================================
+   선택 버튼
+   ========================================================= */
+selectBtnEl.addEventListener('click', () => {
+  if (!currentItem || !currentItem.m3u8) return;
+
+  const payload = {
+    source: 'KTV_NANURI',
+    title: currentItem.title || '',
+    m3u8: currentItem.m3u8,
+    metadata: currentItem.meta || {},
+    detailUrl: currentItem.detailUrl || ''
+  };
+
+  localStorage.setItem('autocut:selectedArchive', JSON.stringify(payload));
+
+  // SPA 라우팅 방식(통합 후)
+  location.hash = '#/editor';
+});
+</script>
+
+</body>
+</html>
