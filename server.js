@@ -265,7 +265,7 @@ app.post("/api/search", async (req, res) => {
 const htmlLen = html?.length || 0;
 const hasFnDetail = html.includes("fn_detail(");
 const hasLoginWord =
-  /login|로그인|member\\/login\\.do|doLogin/i.test(html);
+  /login|로그인|member\/login\.do|doLogin/i.test(html);
 
 const foundFnDetail = $("a[onclick*='fn_detail']").length;
 
