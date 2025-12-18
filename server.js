@@ -289,7 +289,7 @@ app.post("/api/search", async (req, res) => {
         const $a = $(a);
         const title = $a.text().trim().replace(/\s+/g, " ");
         const onclick = ($a.attr("onclick") || "").trim();
-        const m = onclick.match(/fn_detail\(\s*'([^']+)'\s*\)/i);
+        const m = onclick.match(/fn_detail\(\s*'([^']+)'/i);
         const detailUrl = m ? m[1] : null;
 
         if (!title || !detailUrl) return;
