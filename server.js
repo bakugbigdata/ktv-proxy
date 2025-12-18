@@ -260,6 +260,18 @@ app.post("/api/search", async (req, res) => {
 
       const $ = load(html);
 
+      const debug = !!req.body.debug;
+
+const htmlLen = html?.length || 0;
+const hasFnDetail = html.includes("fn_detail(");
+const hasLoginWord =
+  /login|로그인|member\\/login\\.do|doLogin/i.test(html);
+
+const foundFnDetail = $("a[onclick*='fn_detail']").length;
+
+// 결과가 0개면 원문 일부를 같이 내려보내자(앞부분만)
+const head = (html || "").slice(0, 1200);
+
       $("a[onclick*='fn_detail']").each((_, a) => {
         const $a = $(a);
         const title = $a.text().trim().replace(/\s+/g, " ");
@@ -314,6 +326,20 @@ app.post("/api/search", async (req, res) => {
     }
 
     return res.json({ items: collected.slice(0, 100) });
+
+    if (debug) {
+  payload.debug = {
+    pageSize,
+    maxPages,
+    page1: {
+      htmlLen,
+      hasFnDetail,
+      foundFnDetail,
+      looksLikeLoginPage: hasLoginWord,
+      head
+    }
+  };
+}
   } catch (err) {
     console.error("search error:", err);
     return res.status(500).json({ error: "server error", detail: String(err) });
