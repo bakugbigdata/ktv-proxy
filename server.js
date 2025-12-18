@@ -196,6 +196,10 @@ app.post("/api/search", async (req, res) => {
     const collected = [];
     const seen = new Set();
 
+    // debug snapshot (page 1 only): enable with body.debug=true OR ?debug=1
+    const debugOn = req.body?.debug === true || req.query?.debug === "1";
+    let debugPage1 = null;
+
     for (let pageIndex = 1; pageIndex <= maxPages; pageIndex++) {
       const body = new URLSearchParams({
         cntntsTy: "original",
@@ -249,7 +253,7 @@ app.post("/api/search", async (req, res) => {
         html = await r1.text();
       }
 
-      // debug for first page only
+      // debug file (first page only)
       if (pageIndex === 1) {
         try {
           fs.writeFileSync("debug_search.html", html, "utf-8");
@@ -260,24 +264,34 @@ app.post("/api/search", async (req, res) => {
 
       const $ = load(html);
 
-      const debug = !!req.body.debug;
+      // ---- DEBUG snapshot (page 1 only) ----
+      if (debugOn && pageIndex === 1) {
+        const htmlLen = html?.length || 0;
+        const hasFnDetail = html.includes("fn_detail(");
+        const looksLikeLoginPage = /login|로그인|member\/login\.do|doLogin/i.test(html);
+        const foundFnDetail = $("[onclick*='fn_detail']").length;
+        const head = (html || "").slice(0, 1200);
 
-const htmlLen = html?.length || 0;
-const hasFnDetail = html.includes("fn_detail(");
-const hasLoginWord =
-  /login|로그인|member\/login\.do|doLogin/i.test(html);
+        debugPage1 = {
+          received: { keyword, debug: req.body?.debug, qdebug: req.query?.debug },
+          pageSize,
+          maxPages,
+          page1: { htmlLen, hasFnDetail, foundFnDetail, looksLikeLoginPage, head }
+        };
+      }
+      // --------------------------------------
 
-const foundFnDetail = $("[onclick*='fn_detail']").length;
+      // 1) Normal DOM parse: any element with onclick containing fn_detail
+      const beforeCount = collected.length;
 
-// 결과가 0개면 원문 일부를 같이 내려보내자(앞부분만)
-const head = (html || "").slice(0, 1200);
+      $("[onclick*='fn_detail']").each((_, el) => {
+        const $el = $(el);
 
-      $("a[onclick*='fn_detail']").each((_, a) => {
-        const $a = $(a);
-        let title = $a.text().trim().replace(/\s+/g, " ");
-        if (!title) title = ($a.attr("title") || "").trim();
+        // title: try element text, title attr, or nearby container's title-ish node
+        let title = $el.text().trim().replace(/\s+/g, " ");
+        if (!title) title = ($el.attr("title") || "").trim();
         if (!title) {
-          const $cardForTitle = $a.closest("li, tr, .item, .list, .result, .cont, .vod_list, .video_list");
+          const $cardForTitle = $el.closest("li, tr, .item, .list, .result, .cont, .vod_list, .video_list");
           title = $cardForTitle
             .find(".tit, .title, .subject, .t, strong, a")
             .first()
@@ -285,23 +299,23 @@ const head = (html || "").slice(0, 1200);
             .trim()
             .replace(/\s+/g, " ");
         }
-        const onclick = ($a.attr("onclick") || "").trim();
-        const m = onclick.match(/fn_detail\(\s*'([^']+)'\s*\)/i);
+
+        const onclick = ($el.attr("onclick") || "").trim();
+        // take first arg even if multiple args exist
+        const m = onclick.match(/fn_detail\(\s*'([^']+)'/i);
         const detailUrl = m ? m[1] : null;
 
-        if (!title || !detailUrl) return;
+        if (!detailUrl) return;
         if (seen.has(detailUrl)) return;
         seen.add(detailUrl);
 
-        // Thumbnail extraction (robust)
+        // Thumbnail extraction (best effort)
         let thumbnail = null;
 
-        // 1) try from the closest result container
-        const $card = $a.closest(
-          "li, .item, .list, .result, .cont, .tit_area, .thumb_area, .img_area, .video_list, .vod_list"
+        const $card = $el.closest(
+          "li, tr, .item, .list, .result, .cont, .tit_area, .thumb_area, .img_area, .video_list, .vod_list"
         );
 
-        // 2) img tag variants
         const $img = $card.find("img").first();
         if ($img && $img.length) {
           thumbnail =
@@ -312,44 +326,47 @@ const head = (html || "").slice(0, 1200);
             null;
         }
 
-        // 3) background-image fallback
         if (!thumbnail) {
           const style = ($card.find("[style*='background']").first().attr("style") || "");
           const bgm = style.match(/url\((['"]?)(.*?)\1\)/i);
           if (bgm && bgm[2]) thumbnail = bgm[2];
         }
 
-        // 4) nps Catalog jpg fallback (strongest)
         if (!thumbnail) {
           const any = $card.html() || "";
-          const mNps = any.match(/https?:\/\/nps\.ktv\.go\.kr\/[^"'\\s]+\/Catalog\/\d+\.jpg/i);
+          const mNps = any.match(/https?:\/\/nps\.ktv\.go\.kr\/[^"'\s]+\/Catalog\/\d+\.jpg/i);
           if (mNps) thumbnail = mNps[0];
         }
 
-        // 5) normalize to absolute
         if (thumbnail && thumbnail.startsWith("/")) thumbnail = `${NANURI_ORIGIN}${thumbnail}`;
+
+        // If title still empty, use detailUrl as a safe fallback
+        if (!title) title = detailUrl;
 
         collected.push({ title, detailUrl, thumbnail });
       });
 
+      // 2) Fallback: parse fn_detail(...) occurrences from raw HTML if DOM route found nothing this page
+      if (collected.length === beforeCount) {
+        const re = /fn_detail\(\s*'([^']+)'/gi;
+        let mm;
+        while ((mm = re.exec(html)) !== null) {
+          const detailUrl = mm[1];
+          if (!detailUrl) continue;
+          if (seen.has(detailUrl)) continue;
+          seen.add(detailUrl);
+
+          collected.push({ title: detailUrl, detailUrl, thumbnail: null });
+          if (collected.length >= 100) break;
+        }
+      }
+
       if (collected.length >= 100) break;
     }
 
-    return res.json({ items: collected.slice(0, 100) });
-
-    if (debug) {
-  payload.debug = {
-    pageSize,
-    maxPages,
-    page1: {
-      htmlLen,
-      hasFnDetail,
-      foundFnDetail,
-      looksLikeLoginPage: hasLoginWord,
-      head
-    }
-  };
-}
+    const payload = { items: collected.slice(0, 100) };
+    if (debugOn && debugPage1) payload.debug = debugPage1;
+    return res.json(payload);
   } catch (err) {
     console.error("search error:", err);
     return res.status(500).json({ error: "server error", detail: String(err) });
