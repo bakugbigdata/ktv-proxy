@@ -30,17 +30,15 @@ app.get("/", (req, res) => {
 const NANURI_ORIGIN = "https://nanuri.ktv.go.kr";
 const SEARCH_URL = `${NANURI_ORIGIN}/search/searchResultMain.do`;
 
+// ====== .env ======
 const NANURI_ID = process.env.NANURI_ID || "";
 const NANURI_PW = process.env.NANURI_PW || "";
 
-// login fields can be customized, but defaults match nanuri
-const LOGIN_URL = process.env.LOGIN_URL || `${NANURI_ORIGIN}/member/doLogin.do`;
+const LOGIN_URL = process.env.LOGIN_URL || "https://nanuri.ktv.go.kr/member/doLogin.do";
 const LOGIN_ID_FIELD = process.env.LOGIN_ID_FIELD || "userId";
 const LOGIN_PW_FIELD = process.env.LOGIN_PW_FIELD || "password";
 
-// -------------------------
-// Session cookie (server holds it)
-// -------------------------
+// ====== session cookie (server holds it) ======
 let cookieHeader = "";
 
 // -------------------------
@@ -95,7 +93,7 @@ async function fetchText(url, options = {}) {
     body: options.body
   });
 
-  // capture cookies (Node 20+ has getSetCookie, but keep fallback)
+  // capture cookies (Node 20+ has getSetCookie, keep fallback)
   try {
     const setCookies = res.headers.getSetCookie ? res.headers.getSetCookie() : [];
     if (setCookies && setCookies.length) cookieHeader = mergeSetCookie(cookieHeader, setCookies);
@@ -109,11 +107,11 @@ async function fetchText(url, options = {}) {
 }
 
 // -------------------------
-// Login (fixed account via .env)
+// LOGIN (fixed account via .env)
 // -------------------------
 async function loginNanuri() {
   if (!LOGIN_URL || !NANURI_ID || !NANURI_PW) {
-    console.log("[LOGIN] missing env. Check .env (NANURI_ID / NANURI_PW)");
+    console.log("[LOGIN] missing env. Check .env");
     return false;
   }
 
@@ -166,7 +164,7 @@ async function loginNanuri() {
 }
 
 // -------------------------
-// Auth status
+// AUTH STATUS
 // -------------------------
 app.get("/api/auth-status", (req, res) => {
   res.json({
@@ -180,7 +178,7 @@ app.get("/api/auth-status", (req, res) => {
 });
 
 // -------------------------
-// SEARCH (multi-page, thumbnail extracted from result list page)
+// SEARCH (multi-page) + optional debug
 // -------------------------
 app.post("/api/search", async (req, res) => {
   try {
@@ -196,7 +194,7 @@ app.post("/api/search", async (req, res) => {
     const collected = [];
     const seen = new Set();
 
-    // debug snapshot (page 1 only): enable with body.debug=true OR ?debug=1
+    // debug snapshot (page 1 only)
     const debugOn = req.body?.debug === true || req.query?.debug === "1";
     let debugPage1 = null;
 
@@ -242,34 +240,65 @@ app.post("/api/search", async (req, res) => {
 
       let html = "";
       const loc1 = r1.headers.get("location");
+
       if (r1.status >= 300 && r1.status < 400 && loc1) {
         const nextUrl = loc1.startsWith("http") ? loc1 : `${NANURI_ORIGIN}${loc1}`;
         const r2 = await fetchText(nextUrl, {
           method: "GET",
-          headers: { Referer: SEARCH_URL }
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+            Referer: SEARCH_URL,
+            ...(cookieHeader ? { Cookie: cookieHeader } : {})
+          }
         });
         html = r2.text;
       } else {
         html = await r1.text();
       }
 
-      // debug file (first page only)
+
+      // ---- GET fallback: some environments return the search main page for POST ----
+      // If the HTML doesn't contain any fn_detail('...') call (only function definition), try GET with query params.
+      const hasFnDetailCall = /fn_detail\(\s*'[^']+/i.test(html);
+      if (!hasFnDetailCall) {
+        const qs = new URLSearchParams({
+          cntntsTy: "original",
+          baseKeyword: keyword,
+          category: "ALL",
+          clorYn: "N",
+          koglTyYn: "N",
+          mediaTyYn: "N",
+          dwldPosblAtYn: "N",
+          pageIndex: String(pageIndex),
+          pageUnit: String(pageSize),
+          pageSize: String(pageSize)
+        });
+        const getUrl = `${SEARCH_URL}?${qs.toString()}`;
+        const g = await fetchText(getUrl, { method: "GET", headers: { Referer: SEARCH_URL } });
+        if (g?.text && g.text.length > html.length) {
+          html = g.text;
+        }
+      }
+      // --------------------------------
+
       if (pageIndex === 1) {
         try {
           fs.writeFileSync("debug_search.html", html, "utf-8");
-          console.log("[SEARCH] saved debug_search.html");
-          console.log("[SEARCH] html length:", html.length);
+          console.log("saved debug_search.html");
+          console.log("SEARCH html length:", html.length);
+          console.log("SEARCH contains fn_detail:", html.includes("fn_detail("));
         } catch (_) {}
       }
 
       const $ = load(html);
 
-      // ---- DEBUG snapshot (page 1 only) ----
+      // ---- DEBUG (page 1 snapshot) ----
       if (debugOn && pageIndex === 1) {
         const htmlLen = html?.length || 0;
         const hasFnDetail = html.includes("fn_detail(");
         const looksLikeLoginPage = /login|로그인|member\/login\.do|doLogin/i.test(html);
-        const foundFnDetail = $("[onclick*='fn_detail']").length;
+        const foundFnDetail = $("a[onclick*='fn_detail']").length;
         const head = (html || "").slice(0, 1200);
 
         debugPage1 = {
@@ -279,41 +308,24 @@ app.post("/api/search", async (req, res) => {
           page1: { htmlLen, hasFnDetail, foundFnDetail, looksLikeLoginPage, head }
         };
       }
-      // --------------------------------------
+      // ---------------------------------
 
-      // 1) Normal DOM parse: any element with onclick containing fn_detail
-      const beforeCount = collected.length;
-
-      $("[onclick*='fn_detail']").each((_, el) => {
-        const $el = $(el);
-
-        // title: try element text, title attr, or nearby container's title-ish node
-        let title = $el.text().trim().replace(/\s+/g, " ");
-        if (!title) title = ($el.attr("title") || "").trim();
-        if (!title) {
-          const $cardForTitle = $el.closest("li, tr, .item, .list, .result, .cont, .vod_list, .video_list");
-          title = $cardForTitle
-            .find(".tit, .title, .subject, .t, strong, a")
-            .first()
-            .text()
-            .trim()
-            .replace(/\s+/g, " ");
-        }
-
-        const onclick = ($el.attr("onclick") || "").trim();
-        // take first arg even if multiple args exist
+      $("[onclick*='fn_detail']").each((_, a) => {
+        const $a = $(a);
+        const title = $a.text().trim().replace(/\s+/g, " ");
+        const onclick = ($a.attr("onclick") || "").trim();
         const m = onclick.match(/fn_detail\(\s*'([^']+)'/i);
         const detailUrl = m ? m[1] : null;
 
-        if (!detailUrl) return;
+        if (!title || !detailUrl) return;
         if (seen.has(detailUrl)) return;
         seen.add(detailUrl);
 
-        // Thumbnail extraction (best effort)
+        // ✅ Thumbnail extraction (search list page)
         let thumbnail = null;
 
-        const $card = $el.closest(
-          "li, tr, .item, .list, .result, .cont, .tit_area, .thumb_area, .img_area, .video_list, .vod_list"
+        const $card = $a.closest(
+          "li, .item, .list, .result, .cont, .tit_area, .thumb_area, .img_area, .video_list, .vod_list"
         );
 
         const $img = $card.find("img").first();
@@ -334,42 +346,25 @@ app.post("/api/search", async (req, res) => {
 
         if (!thumbnail) {
           const any = $card.html() || "";
-          const mNps = any.match(/https?:\/\/nps\.ktv\.go\.kr\/[^"'\s]+\/Catalog\/\d+\.jpg/i);
+          const mNps = any.match(/https?:\/\/nps\.ktv\.go\.kr\/[^"'\\s]+\/Catalog\/\d+\.jpg/i);
           if (mNps) thumbnail = mNps[0];
         }
 
         if (thumbnail && thumbnail.startsWith("/")) thumbnail = `${NANURI_ORIGIN}${thumbnail}`;
 
-        // If title still empty, use detailUrl as a safe fallback
-        if (!title) title = detailUrl;
-
         collected.push({ title, detailUrl, thumbnail });
       });
-
-      // 2) Fallback: parse fn_detail(...) occurrences from raw HTML if DOM route found nothing this page
-      if (collected.length === beforeCount) {
-        const re = /fn_detail\(\s*'([^']+)'/gi;
-        let mm;
-        while ((mm = re.exec(html)) !== null) {
-          const detailUrl = mm[1];
-          if (!detailUrl) continue;
-          if (seen.has(detailUrl)) continue;
-          seen.add(detailUrl);
-
-          collected.push({ title: detailUrl, detailUrl, thumbnail: null });
-          if (collected.length >= 100) break;
-        }
-      }
 
       if (collected.length >= 100) break;
     }
 
     const payload = { items: collected.slice(0, 100) };
     if (debugOn && debugPage1) payload.debug = debugPage1;
+
     return res.json(payload);
-  } catch (err) {
-    console.error("search error:", err);
-    return res.status(500).json({ error: "server error", detail: String(err) });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: "server error", detail: String(e) });
   }
 });
 
@@ -423,35 +418,26 @@ app.post("/api/play-url", async (req, res) => {
       });
     }
 
-    // debug
     try {
       fs.writeFileSync("debug_detail.html", html, "utf-8");
-      console.log("[DETAIL] saved debug_detail.html");
+      console.log("saved debug_detail.html");
     } catch (_) {}
 
-    // -------------------------
-    // thumbnail extract
-    // -------------------------
+    // 썸네일(postImageUrl) 자동 추출
     let thumbnail = null;
-
-    // 1) gmediaVideoPlugin config
     const thumb1 = html.match(/postImageUrl\s*:\s*['"]([^'"]+)['"]/i);
     if (thumb1 && thumb1[1]) thumbnail = thumb1[1];
 
-    // 2) HTML fallback (nps catalog)
     if (!thumbnail) {
       const thumb2 = html.match(/https?:\/\/nps\.ktv\.go\.kr\/[^"'\\s]+\/Catalog\/\d+\.jpg/i);
       if (thumb2) thumbnail = thumb2[0];
     }
 
-    // -------------------------
-    // m3u8 extract
-    // -------------------------
-    // 1) direct m3u8
+    // m3u8 추출
     let m3u8Match = html.match(/https?:\/\/play\.g\.ktv\.go\.kr:4433\/[^"'\\s]+\.m3u8/g);
     let m3u8 = m3u8Match ? m3u8Match[0] : null;
 
-    // 2) gmediaVideoPlugin vodUrl_m (encodeURI / plain)
+    // gmediaVideoPlugin vodUrl_m 추출
     if (!m3u8) {
       const mVod = html.match(/vodUrl_m\s*:\s*encodeURI\(\s*"([^"]+)"\s*\)/i);
       if (mVod && mVod[1]) m3u8 = mVod[1];
@@ -461,7 +447,7 @@ app.post("/api/play-url", async (req, res) => {
       if (mVod2 && mVod2[1]) m3u8 = mVod2[1];
     }
 
-    // 3) mp4 -> playlist.m3u8
+    // mp4 -> playlist.m3u8
     if (!m3u8) {
       const mp4Match = html.match(/https?:\/\/play\.g\.ktv\.go\.kr:4433\/[^"'\\s]+\.mp4[^"'\\s]*/g);
       const mp4Url = mp4Match ? mp4Match[0] : null;
@@ -475,7 +461,7 @@ app.post("/api/play-url", async (req, res) => {
       }
     }
 
-    // 4) relative /vod-proxy
+    // 상대경로 /vod-proxy
     if (!m3u8) {
       const proxy = html.match(/\/vod-proxy\/[^"'\\s]+playlist\.m3u8/g);
       if (proxy && proxy[0]) {
@@ -494,7 +480,7 @@ app.post("/api/play-url", async (req, res) => {
 
     return res.json({ m3u8, thumbnail, meta });
   } catch (e) {
-    console.error("play-url error:", e);
+    console.error(e);
     return res.status(500).json({ error: "server error", detail: String(e) });
   }
 });
