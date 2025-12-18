@@ -285,7 +285,7 @@ app.post("/api/search", async (req, res) => {
       }
       // ---------------------------------
 
-      $("a[onclick*='fn_detail']").each((_, a) => {
+      $("[onclick*='fn_detail']").each((_, a) => {
         const $a = $(a);
         const title = $a.text().trim().replace(/\s+/g, " ");
         const onclick = ($a.attr("onclick") || "").trim();
