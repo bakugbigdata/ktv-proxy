@@ -190,6 +190,17 @@ app.post("/api/search", async (req, res) => {
         pageUnit: String(pageSize),
         pageSize: String(pageSize)
       });
+          // 🔁 for 루프 끝난 직후 (여기에 추가)
+    return res.json({
+      items: collected
+    });
+
+      } catch (err) {
+    console.error("search error:", err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 
       const r1 = await fetch(SEARCH_URL, {
         method: "POST",
@@ -200,7 +211,7 @@ app.post("/api/search", async (req, res) => {
           "Content-Type": "application/x-www-form-urlencoded",
           "Origin": NANURI_ORIGIN,
           "Referer": `${NANURI_ORIGIN}/search/searchResultMain.do`,
-          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept": "text/html,application/xtml+xml,application/xml;q=0.9,*/*;q=0.8",
           ...(cookieHeader ? { Cookie: cookieHeader } : {})
         },
         body
