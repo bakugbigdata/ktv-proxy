@@ -170,18 +170,19 @@ app.post("/api/search", async (req, res) => {
     if (!keyword) return res.status(400).json({ error: "keyword required" });
 
     if (!cookieHeader) await loginNanuri();
+    if (!cookieHeader) return res.status(401).json({ error: "login failed (check .env)" });
 
-    const maxPages = 5;  // 늘리면 더 많이 가져옴
-    const pageSize = 30;
+    const maxPages = Number(req.body.maxPages || 5);
+    const pageSize = Number(req.body.pageSize || 30);
 
     const collected = [];
     const seen = new Set();
 
-    
-
-    // debug snapshot (page 1 only)
+    // debug snapshot (page 1 only) - enabled by body.debug=true or ?debug=1
+    const debugOn = req.body?.debug === true || req.query?.debug === "1";
     let debugPage1 = null;
-for (let pageIndex = 1; pageIndex <= maxPages; pageIndex++) {
+
+    for (let pageIndex = 1; pageIndex <= maxPages; pageIndex++) {
       const body = new URLSearchParams({
         cntntsTy: "original",
         baseKeyword: keyword,
@@ -194,15 +195,136 @@ for (let pageIndex = 1; pageIndex <= maxPages; pageIndex++) {
         pageUnit: String(pageSize),
         pageSize: String(pageSize)
       });
-    }
-          // 🔁 for 루프 끝난 직후 (여기에 추가)
-    return res.json({ items: collected });
 
-   } catch (err) {
+      // POST can redirect - handle 302 manually, then GET
+      const r1 = await fetch(SEARCH_URL, {
+        method: "POST",
+        redirect: "manual",
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Origin": NANURI_ORIGIN,
+          "Referer": SEARCH_URL,
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          ...(cookieHeader ? { Cookie: cookieHeader } : {})
+        },
+        body
+      });
+
+      // capture cookies
+      try {
+        const setCookies = r1.headers.getSetCookie ? r1.headers.getSetCookie() : [];
+        if (setCookies && setCookies.length) cookieHeader = mergeSetCookie(cookieHeader, setCookies);
+        else {
+          const sc = r1.headers.get("set-cookie");
+          if (sc) cookieHeader = mergeSetCookie(cookieHeader, [sc]);
+        }
+      } catch (_) {}
+
+      let html = "";
+      const loc1 = r1.headers.get("location");
+      if (r1.status >= 300 && r1.status < 400 && loc1) {
+        const nextUrl = loc1.startsWith("http") ? loc1 : `${NANURI_ORIGIN}${loc1}`;
+        const r2 = await fetchText(nextUrl, {
+          method: "GET",
+          headers: { Referer: SEARCH_URL }
+        });
+        html = r2.text;
+      } else {
+        html = await r1.text();
+      }
+
+      // keep original debug file write (first page)
+      if (pageIndex === 1) {
+        try {
+          fs.writeFileSync("debug_search.html", html, "utf-8");
+          console.log("[SEARCH] saved debug_search.html");
+          console.log("[SEARCH] html length:", html.length);
+        } catch (_) {}
+      }
+
+      const $ = load(html);
+
+      // ---- DEBUG snapshot (page 1 only) ----
+      if (debugOn && pageIndex === 1) {
+        const htmlLen = html?.length || 0;
+        const hasFnDetail = html.includes("fn_detail(");
+        const looksLikeLoginPage = /login|로그인|member\/login\.do|doLogin/i.test(html);
+        const foundFnDetail = $("a[onclick*='fn_detail']").length;
+        const head = (html || "").slice(0, 1200);
+
+        debugPage1 = {
+          received: { keyword, debug: req.body?.debug, qdebug: req.query?.debug },
+          pageSize,
+          maxPages,
+          page1: { htmlLen, hasFnDetail, foundFnDetail, looksLikeLoginPage, head }
+        };
+      }
+      // --------------------------------------
+
+      $("a[onclick*='fn_detail']").each((_, a) => {
+        const $a = $(a);
+        const title = $a.text().trim().replace(/\s+/g, " ");
+        const onclick = ($a.attr("onclick") || "").trim();
+        const m = onclick.match(/fn_detail\(\s*'([^']+)'\s*\)/i);
+        const detailUrl = m ? m[1] : null;
+
+        if (!title || !detailUrl) return;
+        if (seen.has(detailUrl)) return;
+        seen.add(detailUrl);
+
+        // Thumbnail extraction (robust)
+        let thumbnail = null;
+
+        // 1) try from the closest result container
+        const $card = $a.closest(
+          "li, .item, .list, .result, .cont, .tit_area, .thumb_area, .img_area, .video_list, .vod_list"
+        );
+
+        // 2) img tag variants
+        const $img = $card.find("img").first();
+        if ($img && $img.length) {
+          thumbnail =
+            $img.attr("data-src") ||
+            $img.attr("data-original") ||
+            $img.attr("data-lazy") ||
+            $img.attr("src") ||
+            null;
+        }
+
+        // 3) background-image fallback
+        if (!thumbnail) {
+          const style = ($card.find("[style*='background']").first().attr("style") || "");
+          const bgm = style.match(/url\((['"]?)(.*?)\1\)/i);
+          if (bgm && bgm[2]) thumbnail = bgm[2];
+        }
+
+        // 4) nps Catalog jpg fallback (strongest)
+        if (!thumbnail) {
+          const any = $card.html() || "";
+          const mNps = any.match(/https?:\/\/nps\.ktv\.go\.kr\/[^"'\s]+\/Catalog\/\d+\.jpg/i);
+          if (mNps) thumbnail = mNps[0];
+        }
+
+        // 5) normalize to absolute
+        if (thumbnail && thumbnail.startsWith("/")) thumbnail = `${NANURI_ORIGIN}${thumbnail}`;
+
+        collected.push({ title, detailUrl, thumbnail });
+      });
+
+      if (collected.length >= 100) break;
+    }
+
+    const payload = { items: collected.slice(0, 100) };
+    if (debugOn && debugPage1) payload.debug = debugPage1;
+    return res.json(payload);
+  } catch (err) {
     console.error("search error:", err);
-    return res.status(500).json({ error: err.message || String(err) });
+    return res.status(500).json({ error: "server error", detail: String(err) });
   }
 });
+
 
 
       const r1 = await fetch(SEARCH_URL, {
@@ -246,24 +368,6 @@ for (let pageIndex = 1; pageIndex <= maxPages; pageIndex++) {
       }
 
       const $ = load(html);
-
-
-      // ---- DEBUG (page 1 snapshot) ----
-      const debugOn = req.body?.debug === true || req.query?.debug === "1";
-      if (debugOn && pageIndex === 1) {
-        const htmlLen = html?.length || 0;
-        const hasFnDetail = html.includes("fn_detail(");
-        const looksLikeLoginPage = /login|로그인|member\/login\.do|doLogin/i.test(html);
-        const foundFnDetail = $("a[onclick*='fn_detail']").length;
-        const head = (html || "").slice(0, 1200);
-
-        debugPage1 = {
-          pageSize,
-          maxPages,
-          page1: { htmlLen, hasFnDetail, foundFnDetail, looksLikeLoginPage, head }
-        };
-      }
-      // --------------------------------
 
       $("a[onclick*='fn_detail']").each((_, a) => {
   const $a = $(a);
@@ -316,11 +420,8 @@ for (let pageIndex = 1; pageIndex <= maxPages; pageIndex++) {
 
       if (collected.length >= 100) break;
 
-    const debugOn = req.body?.debug === true || req.query?.debug === "1";
-    const payload = { items: collected.slice(0, 100) };
-    if (debugOn && debugPage1) payload.debug = debugPage1;
-    return res.json(payload);
-} catch (e) {
+    return res.json({ items: collected.slice(0, 100)});
+  } catch (e) {
     console.error(e);
     return res.status(500).json({ error: "server error", detail: String(e) });
   }
