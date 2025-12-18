@@ -263,8 +263,10 @@ app.post("/api/search", async (req, res) => {
       const hasFnDetailCall = /fn_detail\(\s*'[^']+/i.test(html);
       if (!hasFnDetailCall) {
         const qs = new URLSearchParams({
-          cntntsTy: "original",
+                    cntntsTy: "original",
           baseKeyword: keyword,
+          searchKeyword: keyword,
+          searchCondition: "ALL",
           category: "ALL",
           clorYn: "N",
           koglTyYn: "N",
